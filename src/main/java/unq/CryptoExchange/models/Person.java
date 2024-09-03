@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import unq.CryptoExchange.models.enums.AttemptStatus;
+import unq.CryptoExchange.models.enums.OperationType;
 
 @Entity
 @Data
@@ -22,7 +24,14 @@ public class Person {
     private String wallet;
     private int reputation;
 
-    public SellingAttempt createSellingAttempt(String cripto, int quantity, Float price){
-        return new SellingAttempt(price,quantity, cripto, this.person_id);
+    public ExchangeAttempt createAttempt(String crypto, int quantity, Float price, OperationType operationType){
+        return new ExchangeAttempt(price,quantity, crypto, this.person_id, operationType);
     }
+
+    public Notification buyCrypto(ExchangeAttempt attempt){
+        attempt.setStatus(AttemptStatus.PENDING);
+        return new Notification(attempt, this.person_id);
+    }
+
+
 }
