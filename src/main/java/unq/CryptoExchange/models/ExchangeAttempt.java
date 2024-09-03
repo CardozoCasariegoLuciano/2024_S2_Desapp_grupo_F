@@ -10,7 +10,7 @@ import unq.CryptoExchange.models.enums.OperationType;
 
 import java.util.Date;
 
-@Entity
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

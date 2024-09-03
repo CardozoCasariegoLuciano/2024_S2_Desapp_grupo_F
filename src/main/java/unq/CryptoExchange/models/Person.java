@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import unq.CryptoExchange.models.enums.AttemptStatus;
 import unq.CryptoExchange.models.enums.OperationType;
 
-@Entity
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
