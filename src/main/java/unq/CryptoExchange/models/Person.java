@@ -1,6 +1,12 @@
 package unq.CryptoExchange.models;
 
-import jakarta.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,12 +22,11 @@ import unq.CryptoExchange.models.enums.OperationType;
 @Builder
 public class Person {
 
-    @id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    @unique
+    @Column(unique = true)
     @NotNull
     @Size(min = 8)
     @Email
@@ -32,7 +37,7 @@ public class Person {
     private String password;
         
     @Min(0)
-    private int reputation = 5;
+    private int reputation;
     
     private String cvu;
     private String name;
@@ -42,12 +47,12 @@ public class Person {
 
 
     public ExchangeAttempt createAttempt(String crypto, int quantity, Float price, OperationType operationType){
-        return new ExchangeAttempt(price,quantity, crypto, this.person_id, operationType);
+        return new ExchangeAttempt(price,quantity, crypto, this.id, operationType);
     }
 
     public Notification buyCrypto(ExchangeAttempt attempt){
         attempt.setStatus(AttemptStatus.PENDING);
-        return new Notification(attempt, this.person_id);
+        return new Notification(attempt, this.id);
     }
 
 

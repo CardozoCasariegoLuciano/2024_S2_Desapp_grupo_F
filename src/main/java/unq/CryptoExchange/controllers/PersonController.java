@@ -6,9 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import unq.CryptoExchange.dto.request.PersonRegistrationDto;
+import unq.CryptoExchange.services.impl.PersonService;
 
 @RestController
 @RequestMapping("api/v1/person")
@@ -17,8 +16,9 @@ public class PersonController {
     @Autowired
     PersonService personService;
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @PostMapping("/registration")
-    public ResponseEntity<string> registerPerson(@Validated  @RequestBody PersonRegistrationDto personBody){
+    public ResponseEntity<String> registerPerson(@Validated  @RequestBody PersonRegistrationDto personBody){
         try{
             
             this.personService.savePerson(personBody);
