@@ -8,21 +8,38 @@ import lombok.NoArgsConstructor;
 import unq.CryptoExchange.models.enums.AttemptStatus;
 import unq.CryptoExchange.models.enums.OperationType;
 
-
+@Entity
+@Table(name = "persons")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Person {
-    private Long person_id;
-    private String name;
-    private String lastname;
+
+    @id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
+    @unique
+    @NotNull
+    @Size(min = 8)
+    @Email
     private String email;
+
+    @JsonIgnore  
+    @NotNull
     private String password;
+        
+    @Min(0)
+    private int reputation = 5;
+    
     private String cvu;
+    private String name;
+    private String lastname;  
     private String street;
     private String wallet;
-    private int reputation;
+
 
     public ExchangeAttempt createAttempt(String crypto, int quantity, Float price, OperationType operationType){
         return new ExchangeAttempt(price,quantity, crypto, this.person_id, operationType);
