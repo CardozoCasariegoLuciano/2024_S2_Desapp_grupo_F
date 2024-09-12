@@ -11,7 +11,6 @@ import unq.CryptoExchange.services.ExampleService;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("api/v1/example")
@@ -19,6 +18,7 @@ public class ExampleController {
     @Autowired
     ExampleService exampleService;
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @GetMapping("")
     public ResponseEntity<?> getAllExamples(){
         List<Example> result = this.exampleService.getAllExamples();
@@ -28,6 +28,7 @@ public class ExampleController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @PostMapping("")
     public ResponseEntity<?> createExamples(@Validated  @RequestBody CreateExampleDto body){
         Example result = this.exampleService.saveExample(body.toModel());
