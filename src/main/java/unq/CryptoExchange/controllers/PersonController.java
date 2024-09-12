@@ -1,5 +1,6 @@
 package unq.CryptoExchange.controllers;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +18,20 @@ public class PersonController {
     PersonService personService;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    @PostMapping("/registration")
-    public ResponseEntity<String> registerPerson(@Validated  @RequestBody PersonRegistrationDto personBody){
+    @PostMapping("registration")
+    public ResponseEntity<Map<String, String>> registerPerson(@Validated  @RequestBody PersonRegistrationDto personBody){
         try{
             
             this.personService.savePerson(personBody);
-            return new ResponseEntity("Person registered successfully", HttpStatus.CREATED);
+
+            Map<String, String> response = Map.of("message","Person registered successfully" );
+            return new ResponseEntity(response, HttpStatus.CREATED);
 
         }
         catch (Exception e){
 
-            return new ResponseEntity("Error during registration: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            Map<String, String> erroResponse = Map.of("message","Error during registration: " + e.getMessage() );
+            return new ResponseEntity(erroResponse, HttpStatus.BAD_REQUEST);
         
         }        
     }
