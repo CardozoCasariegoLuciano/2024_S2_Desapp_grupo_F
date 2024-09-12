@@ -28,4 +28,8 @@ public class PersonRegistrationDto {
     @Size(message = "The password must be between 8 and 20 characters", max = 20, min = 8)
     private String password;
 
+    /*public Person toModel(){
+        return new Person(null, this.name, this.lastname, this.email, this.password);
+    }*/
+
 }
