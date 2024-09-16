@@ -1,0 +1,22 @@
+{
+    "personas": [
+        {
+            "name": "Pablo",
+            "lastname": "Berna",
+            "email": "pablo.berna@example.com",
+            "address": "Cuenca 4779",
+            "password": "unaPassword123!",
+            "cvu": "2231456789954442334123",
+            "wallet": "123456789"
+        },
+        {
+            "name": "Pablo",
+            "lastname": "Invalid",
+            "email": "invalidemail.com",
+            "address": "Cuenca 4779",
+            "password": "invalidpas",
+            "cvu": "2231",
+            "wallet": "12"
+        }
+    ]
+}

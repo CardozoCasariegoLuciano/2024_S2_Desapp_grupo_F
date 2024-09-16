@@ -32,7 +32,10 @@ public class PersonControllerTest {
             .name("Pablo")
             .lastname("Berna")
             .email("pablo.berna@example.com")
-            .password("unaPassword123")
+            .address("Cuenca 4779")
+            .password("unaPassword123!")
+            .cvu("2231456789954442334123")
+            .wallet("123456789")
             .build();
 
         mockMvc.perform(post("/api/v1/person/registration")

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,23 +28,37 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Size(min = 3, max = 30)
+    private String name;
+
+    @NotBlank
+    @Size(min = 3, max = 30)
+    private String lastname; 
+
     @Column(unique = true)
-    @NotNull
-    @Size(min = 8)
+    @NotBlank
     @Email
     private String email;
 
+    @NotBlank
+    @Size(min= 8, max=30)
+    private String address;
+
     @JsonIgnore  
     @NotNull
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{6,}$")
     private String password;
-        
+    
     @Min(0)
     private int reputation;
     
+    @NotBlank
+    @Min(22)
     private String cvu;
-    private String name;
-    private String lastname;  
-    private String street;
+    
+    @NotBlank
+    @Min(8)
     private String wallet;
 
 
