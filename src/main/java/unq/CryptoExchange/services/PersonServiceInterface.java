@@ -6,5 +6,6 @@ import unq.CryptoExchange.models.Person;
 public interface PersonServiceInterface {
 
     Person savePerson(PersonRegistrationDto personDto);
-    
+    void cleanAll();
+
 }

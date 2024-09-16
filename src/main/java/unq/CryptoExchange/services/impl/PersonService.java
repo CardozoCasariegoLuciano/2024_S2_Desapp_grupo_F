@@ -37,4 +37,9 @@ public class PersonService implements PersonServiceInterface {
         
         return personRepository.save(person);        
     }
+
+    @Override
+    public void cleanAll() {
+        this.personRepository.deleteAll();
+    }
 }
