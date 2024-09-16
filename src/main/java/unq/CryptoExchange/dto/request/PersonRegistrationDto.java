@@ -37,8 +37,8 @@ public class PersonRegistrationDto {
     @Size(message = "CVU should be valid",min= 22)
     private String cvu;
     
-    @NotBlank(message = "CVU is required")
-    @Size(message = "CVU should be valid",min= 8)
+    @NotBlank(message = "Wallet is required")
+    @Size(message = "Wallet should be valid",min= 8)
     private String wallet;
 
 }

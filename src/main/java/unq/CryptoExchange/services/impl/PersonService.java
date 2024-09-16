@@ -29,7 +29,10 @@ public class PersonService implements PersonServiceInterface {
             .name(personDto.getName())
             .lastname(personDto.getLastname())
             .email(personDto.getEmail())
+            .address(personDto.getAddress())
             .password(personDto.getPassword())
+            .cvu(personDto.getCvu())
+            .wallet(personDto.getWallet())
             .build();
         
         return personRepository.save(person);        
