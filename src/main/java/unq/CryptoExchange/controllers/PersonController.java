@@ -4,7 +4,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import unq.CryptoExchange.dto.request.PersonRegistrationDto;
@@ -19,10 +18,10 @@ public class PersonController {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @PostMapping("registration")
-    public ResponseEntity<Map<String, String>> registerPerson(@Validated  @RequestBody PersonRegistrationDto personBody){
+    public ResponseEntity<Map<String, String>> registerPerson(@RequestBody PersonRegistrationDto personBody){
         try{
             
-            this.personService.savePerson(personBody);
+            personService.savePerson(personBody);
 
             Map<String, String> response = Map.of("message","Person registered successfully" );
             return new ResponseEntity(response, HttpStatus.CREATED);
