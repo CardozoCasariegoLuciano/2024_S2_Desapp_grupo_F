@@ -11,6 +11,7 @@ import java.util.HashMap;
 @ControllerAdvice
 public class _ExceptionController {
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> InvalidDTOArguments(MethodArgumentNotValidException ex){
         HashMap<String, String> resp = new HashMap<>();
@@ -19,6 +20,7 @@ public class _ExceptionController {
         return new ResponseEntity(resp, HttpStatus.BAD_REQUEST);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @ExceptionHandler(DuplicatedException.class)
     public ResponseEntity<?> DuplicatedException(DuplicatedException ex){
         HashMap<String, String> resp = new HashMap<>();
@@ -26,6 +28,7 @@ public class _ExceptionController {
         return new ResponseEntity(resp, HttpStatus.BAD_REQUEST);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @ExceptionHandler(InvalidQuantityException.class)
     public ResponseEntity<?> InvalidQuantity(InvalidQuantityException ex){
         HashMap<String, String> resp = new HashMap<>();
