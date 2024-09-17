@@ -9,7 +9,7 @@ import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.services.PersonServiceInterface;
 
 @SpringBootTest
-public class PersonServiceTest {
+class PersonServiceTest {
 
     @Autowired
     PersonServiceInterface personService;
