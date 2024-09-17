@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.awt.Desktop;
 import java.net.URI;
@@ -12,6 +13,13 @@ import java.net.URI;
 public class CryptoExchangeApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(CryptoExchangeApplication.class);
+
+    @Value("${swagger.ui.url}")
+    private static String swaggerUrl;
+
+    @Value("${h2.console.url}")
+    private static String h2ConsoleUrl;
+
 
     public static void main(String[] args) {
 
@@ -24,11 +32,12 @@ public class CryptoExchangeApplication {
     }
 
     private static void openSwaggerUI() {
+
         try {
 
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 
-                Desktop.getDesktop().browse(new URI("http://localhost:8080/swagger-ui/index.html"));
+                Desktop.getDesktop().browse(new URI(swaggerUrl));
             }
         } catch (Exception e) {
 
@@ -41,7 +50,7 @@ public class CryptoExchangeApplication {
 
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 
-                Desktop.getDesktop().browse(new URI("http://localhost:8080/h2-console/"));
+                Desktop.getDesktop().browse(new URI(h2ConsoleUrl));
             }
         } catch (Exception e) {
 
