@@ -23,7 +23,6 @@ import unq.cryptoexchange.models.enums.OperationType;
 @NoArgsConstructor
 @Builder
 public class Person {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,20 +46,19 @@ public class Person {
 
     @JsonIgnore  
     @NotNull
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{6,}$")
+    @Pattern(regexp ="^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*?&_-]{8,}$")
     private String password;
     
     @Min(0)
     private int reputation;
-    
-    @NotBlank
-    @Min(22)
-    private String cvu;
-    
-    @NotBlank
-    @Min(8)
-    private String wallet;
 
+    @NotBlank
+    @Size(min= 22)
+    private String cvu;
+
+    @NotBlank
+    @Size(min= 8)
+    private String wallet;
 
     public ExchangeAttempt createAttempt(String crypto, int quantity, Float price, OperationType operationType){
         return new ExchangeAttempt(price,quantity, crypto, this.id, operationType);
@@ -70,6 +68,4 @@ public class Person {
         attempt.setStatus(AttemptStatus.PENDING);
         return new Notification(attempt, this.id);
     }
-
-
 }

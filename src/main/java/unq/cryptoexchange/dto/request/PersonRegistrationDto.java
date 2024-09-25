@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PersonRegistrationDto {
-    
     @NotBlank(message = "Name is required")
     @Size(message = "The name must be between 3 and 30 characters", max = 30, min = 3)
     private String name;
@@ -30,15 +29,14 @@ public class PersonRegistrationDto {
 
     @NotBlank(message = "Password is required")
     @Size(message = "The password must be between 8 and 20 characters", max = 20, min = 8)
-    @Pattern(message = "The password must have at least 1 lowercase, 1 uppercase, 1 special character and at least 6 characters",regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{6,}$")
+    @Pattern(message = "The password must have at least 1 lowercase, 1 uppercase, 1 special character and at least 8 characters",regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*?&_-]{8,}$")
     private String password;
 
     @NotBlank(message = "CVU is required")
-    @Size(message = "CVU should be valid",min= 22)
+    @Size(message = "CVU  must have at least 22 character",min= 22)
     private String cvu;
     
     @NotBlank(message = "Wallet is required")
-    @Size(message = "Wallet should be valid",min= 8)
+    @Size(message = "Wallet must have at least 8 character",min= 8)
     private String wallet;
-
 }
