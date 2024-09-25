@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
-import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.impl.PersonService;
 
 @RestController
