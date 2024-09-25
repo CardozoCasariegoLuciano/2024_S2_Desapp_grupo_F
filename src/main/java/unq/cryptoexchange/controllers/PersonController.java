@@ -8,13 +8,18 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
+import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.impl.PersonService;
 
 @RestController
 @RequestMapping("api/v1/person")
 public class PersonController {
+    private final PersonService personService;
+
     @Autowired
-    PersonService personService;
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
 
     @PostMapping("registration")
     public ResponseEntity<Map<String, String>> registerPerson(@Validated @RequestBody PersonRegistrationDto personBody){

@@ -13,8 +13,12 @@ import java.util.Optional;
 
 @Service
 public class PersonService implements PersonServiceInterface {
+    private final PersonRepository personRepository;
+
     @Autowired
-    PersonRepository personRepository;
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     @Override
     public Person savePerson(PersonRegistrationDto personDto) {
