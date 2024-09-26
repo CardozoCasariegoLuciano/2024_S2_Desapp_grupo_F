@@ -1,5 +1,6 @@
 package unq.cryptoexchange.PersonTest;
 
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,7 +60,7 @@ class PersonServiceTest {
             this.personService.savePerson(person2);
         });
 
-        Assertions.assertEquals("The email already exists", exception.getMessage());
+        Assertions.assertEquals("The email already exists: "+ person2.getEmail(), exception.getMessage());
     }
 
     @Test
@@ -74,11 +75,11 @@ class PersonServiceTest {
                 .wallet("123456789")
                 .build();
 
-        Exception exception = Assertions.assertThrows(jakarta.validation.ConstraintViolationException.class, () -> {
+        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
             this.personService.savePerson(personDto);
         });
 
-        Assertions.assertEquals("Email should be valid;", exception.getMessage());
+        Assertions.assertTrue(exception.getMessage().contains("propertyPath=email"));
     }
 
     @Test
@@ -93,12 +94,11 @@ class PersonServiceTest {
                 .wallet("123456789")
                 .build();
 
-        Exception exception = Assertions.assertThrows(jakarta.validation.ConstraintViolationException.class, () -> {
+        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
             this.personService.savePerson(personDto);
         });
 
-        Assertions.assertEquals("The password must have at least 1 lowercase, 1 uppercase, 1 special character and at least 6 characters;", exception.getMessage());
-
+        Assertions.assertTrue(exception.getMessage().contains("propertyPath=password"));
     }
 
     @Test
@@ -113,12 +113,10 @@ class PersonServiceTest {
                 .wallet("123456789")
                 .build();
 
-        Exception exception = Assertions.assertThrows(jakarta.validation.ConstraintViolationException.class, () -> {
+        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
             this.personService.savePerson(personDto);
         });
-
-        Assertions.assertTrue(exception.getMessage().contains("Name is required;"));
-
+        Assertions.assertTrue(exception.getMessage().contains("propertyPath=name"));
     }
 
     @Test
@@ -133,12 +131,10 @@ class PersonServiceTest {
                 .wallet("123456789")
                 .build();
 
-        Exception exception = Assertions.assertThrows(jakarta.validation.ConstraintViolationException.class, () -> {
+        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
             this.personService.savePerson(personDto);
         });
-
-        Assertions.assertTrue(exception.getMessage().contains("The name must be between 3 and 30 characters;"));
-
+        Assertions.assertTrue(exception.getMessage().contains("propertyPath=name"));
     }
 
     @Test
@@ -153,11 +149,10 @@ class PersonServiceTest {
                 .wallet("123456789")
                 .build();
 
-        Exception exception = Assertions.assertThrows(jakarta.validation.ConstraintViolationException.class, () -> {
+        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
             this.personService.savePerson(personDto);
         });
-
-        Assertions.assertTrue(exception.getMessage().contains("Lastname is required;"));
+        Assertions.assertTrue(exception.getMessage().contains("propertyPath=lastname"));
     }
 
     @Test
@@ -172,12 +167,10 @@ class PersonServiceTest {
                 .wallet("123456789")
                 .build();
 
-        Exception exception = Assertions.assertThrows(jakarta.validation.ConstraintViolationException.class, () -> {
+        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
             this.personService.savePerson(personDto);
         });
-
-        Assertions.assertTrue(exception.getMessage().contains("The lastname must be between 3 and 30 characters;"));
-
+        Assertions.assertTrue(exception.getMessage().contains("propertyPath=lastname"));
     }
 
     @Test
@@ -192,12 +185,10 @@ class PersonServiceTest {
                 .wallet("123456789")
                 .build();
 
-        Exception exception = Assertions.assertThrows(jakarta.validation.ConstraintViolationException.class, () -> {
+        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
             this.personService.savePerson(personDto);
         });
-
-        Assertions.assertEquals("CVU should be valid;", exception.getMessage());
-
+        Assertions.assertTrue(exception.getMessage().contains("propertyPath=cvu"));
     }
 
     @Test
@@ -212,12 +203,10 @@ class PersonServiceTest {
                 .wallet("1234567")
                 .build();
 
-        Exception exception = Assertions.assertThrows(jakarta.validation.ConstraintViolationException.class, () -> {
+        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
             this.personService.savePerson(personDto);
         });
-
-        Assertions.assertEquals("Wallet should be valid;", exception.getMessage());
-
+        Assertions.assertTrue(exception.getMessage().contains("propertyPath=wallet"));
     }
 
     @AfterEach
