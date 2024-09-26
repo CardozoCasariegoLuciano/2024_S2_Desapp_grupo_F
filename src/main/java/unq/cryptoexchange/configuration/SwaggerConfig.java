@@ -11,7 +11,7 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         return new OpenAPI().info(new Info()
                 .title("Crypto Exchange")
-                .version("0.0.1")
+                .version("0.0.2")
                 .description("TP Desarrollo de aplicaciones 2024 S2"));
     }
 
