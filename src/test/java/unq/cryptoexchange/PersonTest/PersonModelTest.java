@@ -7,6 +7,7 @@ import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.models.enums.OperationType;
+import unq.cryptoexchange.models.enums.CryptoCurrency;
 
 @SpringBootTest
 class PersonModelTest {
@@ -14,9 +15,9 @@ class PersonModelTest {
     @Test
     void test_01_APersonCanCreateAExchangeAttempt() {
         Person person = new Person();
-        ExchangeAttempt attemp = person.createAttempt("test",23,22.4f, OperationType.BUY);
+        ExchangeAttempt attempt = person.createAttempt(CryptoCurrency.BNBUSDT,23,22.4f, OperationType.BUY);
 
-        Assertions.assertEquals("test", attemp.getCrypto());
+        Assertions.assertEquals(CryptoCurrency.BNBUSDT, attempt.getCrypto());
     }
 
     @Test
@@ -24,10 +25,10 @@ class PersonModelTest {
         Person personA = new Person();
         Person personB = new Person();
 
-        ExchangeAttempt attemp = personA.createAttempt("test",23,22.4f, OperationType.BUY);
+        ExchangeAttempt attempt = personA.createAttempt(CryptoCurrency.BNBUSDT,23,22.4f, OperationType.BUY);
 
-        Assertions.assertEquals(AttemptStatus.OPEN, attemp.getStatus());
-        personB.buyCrypto(attemp);
-        Assertions.assertEquals(AttemptStatus.PENDING, attemp.getStatus());
+        Assertions.assertEquals(AttemptStatus.OPEN, attempt.getStatus());
+        personB.buyCrypto(attempt);
+        Assertions.assertEquals(AttemptStatus.PENDING, attempt.getStatus());
     }
 }
