@@ -3,6 +3,7 @@ package unq.cryptoexchange.PersonTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import unq.cryptoexchange.models.Exchange;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.models.enums.AttemptStatus;
@@ -28,7 +29,8 @@ class PersonModelTest {
         ExchangeAttempt attempt = personA.createAttempt(CryptoCurrency.BNBUSDT,23,22.4f, OperationType.BUY);
 
         Assertions.assertEquals(AttemptStatus.OPEN, attempt.getStatus());
-        personB.buyCrypto(attempt);
+        Exchange exchange = new Exchange(attempt, personB);
+        exchange.makeTransfer();
         Assertions.assertEquals(AttemptStatus.PENDING, attempt.getStatus());
     }
 }

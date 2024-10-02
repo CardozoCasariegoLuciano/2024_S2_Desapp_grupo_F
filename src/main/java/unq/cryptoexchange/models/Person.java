@@ -73,15 +73,6 @@ public class Person {
         return exchangeAttempt;
     }
 
-    public Notification buyCrypto(ExchangeAttempt attempt){
-        attempt.setStatus(AttemptStatus.PENDING);
-        return new Notification(attempt, this.id);
-    }
-
-    public Notification sellCrypto(ExchangeAttempt attempt){
-        attempt.setStatus(AttemptStatus.PENDING);
-        return new Notification(attempt, this.id);
-    }
 
     public void discountReputation(int amount){
         this.reputation = Math.max( 0, this.reputation-amount);
