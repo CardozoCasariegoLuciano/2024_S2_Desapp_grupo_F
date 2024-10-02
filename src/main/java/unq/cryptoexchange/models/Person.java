@@ -14,7 +14,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import unq.cryptoexchange.models.enums.AttemptStatus;
+import unq.cryptoexchange.models.enums.CryptoCurrency;
 import unq.cryptoexchange.models.enums.OperationType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "persons")
@@ -60,12 +64,21 @@ public class Person {
     @Size(min= 8)
     private String wallet;
 
-    public ExchangeAttempt createAttempt(String crypto, int quantity, Float price, OperationType operationType){
-        return new ExchangeAttempt(price,quantity, crypto, this.id, operationType);
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ExchangeAttempt> personAttempts = new ArrayList<>();
+
+    public ExchangeAttempt createAttempt(CryptoCurrency crypto, int quantity, Float price, OperationType operationType){
+        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this, operationType);
+        personAttempts.add(exchangeAttempt);
+        return exchangeAttempt;
     }
 
-    public Notification buyCrypto(ExchangeAttempt attempt){
-        attempt.setStatus(AttemptStatus.PENDING);
-        return new Notification(attempt, this.id);
+
+    public void discountReputation(int amount){
+        this.reputation = Math.max( 0, this.reputation-amount);
+    }
+
+    public void increaseReputation(int amount){
+        this.reputation += amount;
     }
 }
