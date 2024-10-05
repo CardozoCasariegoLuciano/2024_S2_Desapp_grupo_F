@@ -24,7 +24,7 @@ public class ExchangeAttempt {
     private Long attemptId;
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
-    private Person person;
+    private long personId;
     @Enumerated(EnumType.STRING)
     private CryptoCurrency crypto;
     private int cryptoQuantity;
@@ -36,11 +36,11 @@ public class ExchangeAttempt {
     private OperationType operationType;
 
 
-    public ExchangeAttempt(Float price, int cryptoQuantity, CryptoCurrency crypto, Person person, OperationType operationType) {
+    public ExchangeAttempt(Float price, int cryptoQuantity, CryptoCurrency crypto, long personId, OperationType operationType) {
         this.price = price;
         this.cryptoQuantity = cryptoQuantity;
         this.crypto = crypto;
-        this.person = person;
+        this.personId = personId;
         this.createdAt = LocalDateTime.now();
         this.operationType = operationType;
     }

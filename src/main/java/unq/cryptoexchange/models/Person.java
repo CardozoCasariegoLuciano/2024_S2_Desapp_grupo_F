@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.models.enums.CryptoCurrency;
 import unq.cryptoexchange.models.enums.OperationType;
 
@@ -37,7 +36,7 @@ public class Person {
 
     @NotBlank
     @Size(min = 3, max = 30)
-    private String lastname; 
+    private String lastname;
 
     @Column(unique = true)
     @NotBlank
@@ -45,40 +44,41 @@ public class Person {
     private String email;
 
     @NotBlank
-    @Size(min= 8, max=30)
+    @Size(min = 8, max = 30)
     private String address;
 
-    @JsonIgnore  
+    @JsonIgnore
     @NotNull
-    @Pattern(regexp ="^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*?&_-]{8,}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*?&_-]{8,}$")
     private String password;
-    
+
     @Min(0)
     private int reputation;
 
     @NotBlank
-    @Size(min= 22)
+    @Size(min = 22)
     private String cvu;
 
     @NotBlank
-    @Size(min= 8)
+    @Size(min = 8)
     private String wallet;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ExchangeAttempt> personAttempts = new ArrayList<>();
 
-    public ExchangeAttempt createAttempt(CryptoCurrency crypto, int quantity, Float price, OperationType operationType){
-        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this, operationType);
+    public ExchangeAttempt createAttempt(CryptoCurrency crypto, int quantity, Float price, OperationType operationType) {
+        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this.id, operationType);
+        
         personAttempts.add(exchangeAttempt);
+        
         return exchangeAttempt;
     }
 
-
-    public void discountReputation(int amount){
-        this.reputation = Math.max( 0, this.reputation-amount);
+    public void discountReputation(int amount) {
+        this.reputation = Math.max(0, this.reputation - amount);
     }
 
-    public void increaseReputation(int amount){
+    public void increaseReputation(int amount) {
         this.reputation += amount;
     }
 }
