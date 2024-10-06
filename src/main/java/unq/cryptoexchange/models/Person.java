@@ -66,9 +66,9 @@ public class Person {
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ExchangeAttempt> personAttempts = new ArrayList<>();
 
-    public ExchangeAttempt createAttempt(CryptoCurrency crypto, int quantity, Float price, OperationType operationType) {
-        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this.id, operationType);
+    public ExchangeAttempt createAttempt(CryptoCurrency crypto, int quantity, Float price, int amountARG, OperationType operationType) {
         
+        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(crypto, quantity, price, this.id, this.name, this.lastname, amountARG, operationType);
         personAttempts.add(exchangeAttempt);
         
         return exchangeAttempt;

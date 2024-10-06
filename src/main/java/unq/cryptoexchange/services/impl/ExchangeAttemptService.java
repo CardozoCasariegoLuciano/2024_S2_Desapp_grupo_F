@@ -5,63 +5,45 @@ import org.springframework.stereotype.Service;
 
 import jakarta.validation.ConstraintViolationException;
 import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
-import unq.cryptoexchange.dto.request.PersonRegistrationDto;
-import unq.cryptoexchange.exceptions.DuplicatedException;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
+import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
-import unq.cryptoexchange.services.PersonServiceInterface;
-
-import java.util.Optional;
+import unq.cryptoexchange.services.ExAttemptServiceInterface;
 
 @Service
-public class PersonService implements PersonServiceInterface {
+public class ExchangeAttemptService implements ExAttemptServiceInterface {
+    
+    
     private final PersonRepository personRepository;
+    //private final ExchangeAttemptRepository exAttemptRepository;
 
     @Autowired
-    public PersonService(PersonRepository personRepository) {
+    public ExchangeAttemptService(PersonRepository personRepository, ExchangeAttemptRepository exchangeRepository){
+        //this.exAttemptRepository = exchangeRepository;
         this.personRepository = personRepository;
     }
 
     @Override
-    public Person savePerson(PersonRegistrationDto personDto) {
-
-        Optional<Person> existPerson = personRepository.findByEmail(personDto.getEmail());
-        if(existPerson.isPresent()){
-           throw new DuplicatedException("The email already exists: " + personDto.getEmail());
-        }
-
-        Person person = Person.builder()
-            .name(personDto.getName())
-            .lastname(personDto.getLastname())
-            .email(personDto.getEmail())
-            .address(personDto.getAddress())
-            .password(personDto.getPassword())
-            .cvu(personDto.getCvu())
-            .wallet(personDto.getWallet())
-            .build();
-
-        return personRepository.save(person);
-    }
-
-    @Override
-    public void publishExchange(ExchangeAttemptDto ExAtDto) {
-
-        boolean existPerson = personRepository.existsById(ExAtDto.getPersonId());
-        if(!existPerson){
-            throw new ConstraintViolationException("This person " + ExAtDto.getPersonId() + " not already exists", null);
-        }
+    public ExchangeAttempt publishExchange(ExchangeAttemptDto ExAtDto) {
 
         Person person = personRepository.getPersonById(ExAtDto.getPersonId());
 
-        person.createAttempt(
+        if(person == null){
+            throw new ConstraintViolationException("This person with id: " + ExAtDto.getPersonId() + " not already exists", null);
+        }
+
+        ExchangeAttempt exAttempt = person.createAttempt(
             ExAtDto.getCrypto(), 
             ExAtDto.getQuantity(), 
             ExAtDto.getPrice(), 
+            ExAtDto.getAmountARG(),
             ExAtDto.getOperationType()
         );
+        
+        personRepository.save(person);
 
-        return personRepository.
+        return exAttempt;
     } 
 
     @Override
