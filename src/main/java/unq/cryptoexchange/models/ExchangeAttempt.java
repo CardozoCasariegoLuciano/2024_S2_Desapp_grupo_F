@@ -31,7 +31,7 @@ public class ExchangeAttempt {
     private Float price;
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
-    private AttemptStatus status = AttemptStatus.OPEN;
+    private AttemptStatus status;
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
 
@@ -41,6 +41,7 @@ public class ExchangeAttempt {
         this.cryptoQuantity = cryptoQuantity;
         this.crypto = crypto;
         this.person = person;
+        this.status = AttemptStatus.OPEN;
         this.createdAt = LocalDateTime.now();
         this.operationType = operationType;
     }
