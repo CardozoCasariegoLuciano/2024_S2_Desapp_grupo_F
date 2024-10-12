@@ -44,5 +44,6 @@ public class PersonRegistrationDto {
     @Size(message = "Wallet must have at least 8 character",min= 8)
     private String wallet;
 
+    @Builder.Default
     private List<ExchangeAttempt> personAttempts = new ArrayList<>();
 }

@@ -64,6 +64,7 @@ public class Person {
     private String wallet;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
     private List<ExchangeAttempt> personAttempts = new ArrayList<>();
 
     public ExchangeAttempt createAttempt(CryptoCurrency crypto, int quantity, Float price, OperationType operationType){
