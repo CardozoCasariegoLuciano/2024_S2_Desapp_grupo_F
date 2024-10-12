@@ -1,6 +1,7 @@
 package unq.cryptoexchange.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,13 +23,14 @@ public class ExchangeAttempt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attemptId;
-    @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
-    private Person person;
+    private Long personId;
+    private String nameUser;
+    private String lastNameUser;
     @Enumerated(EnumType.STRING)
     private CryptoCurrency crypto;
     private int cryptoQuantity;
     private Float price;
+    private Float amountArg;
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
     private AttemptStatus status;
@@ -36,11 +38,14 @@ public class ExchangeAttempt {
     private OperationType operationType;
 
 
-    public ExchangeAttempt(Float price, int cryptoQuantity, CryptoCurrency crypto, Person person, OperationType operationType) {
+    public ExchangeAttempt(Float price, int cryptoQuantity, CryptoCurrency crypto, Long personId, String nameUser, String lastNameUser, OperationType operationType) {
         this.price = price;
         this.cryptoQuantity = cryptoQuantity;
         this.crypto = crypto;
-        this.person = person;
+        this.amountArg = cryptoQuantity * price;
+        this.personId = personId;
+        this.nameUser = nameUser;
+        this.lastNameUser = lastNameUser;
         this.status = AttemptStatus.OPEN;
         this.createdAt = LocalDateTime.now();
         this.operationType = operationType;

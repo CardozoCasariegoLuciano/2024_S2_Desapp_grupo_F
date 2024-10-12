@@ -19,6 +19,8 @@ class PersonModelTest {
         ExchangeAttempt attempt = person.createAttempt(CryptoCurrency.BNBUSDT,23,22.4f, OperationType.BUY);
 
         Assertions.assertEquals(CryptoCurrency.BNBUSDT, attempt.getCrypto());
+        Assertions.assertEquals(AttemptStatus.OPEN, attempt.getStatus());
+        Assertions.assertEquals(person.getId(), attempt.getPersonId());
     }
 
     @Test
