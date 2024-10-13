@@ -21,6 +21,7 @@ class PersonModelTest {
         Assertions.assertEquals(CryptoCurrency.BNBUSDT, attempt.getCrypto());
         Assertions.assertEquals(AttemptStatus.OPEN, attempt.getStatus());
         Assertions.assertEquals(person.getId(), attempt.getPersonId());
+        Assertions.assertEquals(515.2f, attempt.getAmountArg());
     }
 
     @Test

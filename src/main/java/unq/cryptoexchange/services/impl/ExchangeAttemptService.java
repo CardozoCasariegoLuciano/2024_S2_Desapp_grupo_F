@@ -28,9 +28,11 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
     public ExchangeAttempt saveExchangeAttempt(ExchangeAttemptDto exAttemptDto) {
 
         Optional<Person> existPerson = personRepository.findById(exAttemptDto.getPersonId());
-        if(existPerson.isPresent()){
+        if(existPerson.isEmpty()){
            throw new NullPointerException("This id = " + exAttemptDto.getPersonId() + " does not exist");
         }
+
+        //TODO: Agregar condicion para margen de precio cuando este terminado el punto 3
 
         Person person = existPerson.get();
 

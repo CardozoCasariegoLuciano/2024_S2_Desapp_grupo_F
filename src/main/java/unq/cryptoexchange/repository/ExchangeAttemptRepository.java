@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface ExchangeAttemptRepository extends JpaRepository<ExchangeAttempt, Long> {
-    public Optional<ExchangeAttempt> findByUserId(Long id);
+    public Optional<ExchangeAttempt> findByPersonId(Long id);
 }

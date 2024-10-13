@@ -21,6 +21,10 @@ public class ExchangeAttemptDto {
     @Size(message = "The name must be between 3 and 30 characters", max = 30, min = 3)
     private String name;
 
+    @NotBlank(message = "LastName is required")
+    @Size(message = "The name must be between 3 and 30 characters", max = 30, min = 3)
+    private String lastName;
+
     @NotBlank(message = "Crypto is required")
     private CryptoCurrency crypto;
 
