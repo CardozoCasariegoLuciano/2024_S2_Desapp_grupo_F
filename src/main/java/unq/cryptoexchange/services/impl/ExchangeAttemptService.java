@@ -8,6 +8,7 @@ import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
 import unq.cryptoexchange.dto.request.ItemExAttemptDto;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
+import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.ExchangeAttemptServiceInterface;
@@ -55,7 +56,7 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
     @Override
     public List<ItemExAttemptDto> getAllExchangeAttempt() {
         
-        List<ExchangeAttempt> exAttempt = exAttemptRepository.findAllActive();
+        List<ExchangeAttempt> exAttempt = exAttemptRepository.findByStatus(AttemptStatus.OPEN);
     
         return exAttempt.stream().map(attempt -> {
             
