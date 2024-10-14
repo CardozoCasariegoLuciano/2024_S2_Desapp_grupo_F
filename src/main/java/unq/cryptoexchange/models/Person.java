@@ -50,7 +50,7 @@ public class Person {
     private String password;
     
     @Min(0)
-    private int reputation;
+    private Integer reputation;
 
     @NotBlank
     @Size(min= 22)
@@ -72,5 +72,9 @@ public class Person {
 
     public void increaseReputation(int amount){
         this.reputation += amount;
+    }
+
+    public String getReputation(){
+        return reputation.toString();
     }
 }

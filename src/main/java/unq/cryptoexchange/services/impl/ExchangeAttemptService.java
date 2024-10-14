@@ -1,16 +1,21 @@
 package unq.cryptoexchange.services.impl;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
+import unq.cryptoexchange.dto.request.ItemExAttemptDto;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.ExchangeAttemptServiceInterface;
 
+import java.util.List;
+
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
@@ -48,9 +53,45 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
     } 
 
     @Override
+    public List<ItemExAttemptDto> getAllExchangeAttempt() {
+        
+        List<ExchangeAttempt> exAttempt = exAttemptRepository.findAllActive();
+    
+        return exAttempt.stream().map(attempt -> {
+            
+            //TODO: Resolver OperationCount
+            //int operationsCount = getUserOperationCount(attempt.getPersonId());
+            
+            return new ItemExAttemptDto(
+                    attempt.getCreatedAt(),
+                    attempt.getCrypto(),
+                    attempt.getCryptoQuantity(),
+                    attempt.getPrice(),
+                    attempt.getAmountArg(),
+                    attempt.getNameUser(),
+                    attempt.getLastNameUser()
+                    //operationsCount,
+                    //getUserReputation(attempt.getPersonId())
+            );
+        }).collect(Collectors.toList());
+    }
+
+    /*
+    private String getUserReputation(Long personId) {
+
+        Person person = personRepository.findById(personId).get();
+
+        return person.getReputation();
+    }
+
+
+    private int getUserOperationCount(Long personId) {
+        
+    }*/
+
+
+@Override
     public void cleanAll() {
         exAttemptRepository.deleteAll();
     }
-
-   
 }
