@@ -9,7 +9,6 @@ import unq.cryptoexchange.exceptions.DuplicatedException;
 import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.services.PersonServiceInterface;
 
-import java.util.ArrayList;
 
 @SpringBootTest
 class PersonServiceTest {

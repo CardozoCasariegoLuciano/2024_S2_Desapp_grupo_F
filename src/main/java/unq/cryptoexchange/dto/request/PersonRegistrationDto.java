@@ -5,10 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import unq.cryptoexchange.models.ExchangeAttempt;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -43,6 +39,4 @@ public class PersonRegistrationDto {
     @NotBlank(message = "Wallet is required")
     @Size(message = "Wallet must have at least 8 character",min= 8)
     private String wallet;
-
-    private List<ExchangeAttempt> personAttempts = new ArrayList<>();
 }

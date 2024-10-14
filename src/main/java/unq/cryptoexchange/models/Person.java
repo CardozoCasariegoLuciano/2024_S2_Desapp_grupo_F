@@ -13,12 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.models.enums.CryptoCurrency;
 import unq.cryptoexchange.models.enums.OperationType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "persons")
@@ -54,7 +50,7 @@ public class Person {
     private String password;
     
     @Min(0)
-    private int reputation;
+    private Integer reputation;
 
     @NotBlank
     @Size(min= 22)
@@ -63,13 +59,9 @@ public class Person {
     @NotBlank
     @Size(min= 8)
     private String wallet;
-
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ExchangeAttempt> personAttempts = new ArrayList<>();
-
+  
     public ExchangeAttempt createAttempt(CryptoCurrency crypto, int quantity, Float price, OperationType operationType){
-        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this, operationType);
-        personAttempts.add(exchangeAttempt);
+        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
         return exchangeAttempt;
     }
 
@@ -80,5 +72,9 @@ public class Person {
 
     public void increaseReputation(int amount){
         this.reputation += amount;
+    }
+
+    public String getReputation(){
+        return reputation.toString();
     }
 }
