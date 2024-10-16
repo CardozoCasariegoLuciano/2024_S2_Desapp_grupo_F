@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import unq.cryptoexchange.models.enums.CryptoCurrency;
+import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 
 @Entity
@@ -60,7 +60,7 @@ public class Person {
     @Size(min= 8)
     private String wallet;
   
-    public ExchangeAttempt createAttempt(CryptoCurrency crypto, int quantity, Float price, OperationType operationType){
+    public ExchangeAttempt createAttempt(CryptoSymbol crypto, int quantity, Float price, OperationType operationType){
         ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
         return exchangeAttempt;
     }
