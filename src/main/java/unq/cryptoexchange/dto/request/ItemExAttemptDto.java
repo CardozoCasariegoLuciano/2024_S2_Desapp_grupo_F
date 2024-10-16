@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import unq.cryptoexchange.models.enums.CryptoCurrency;
+import unq.cryptoexchange.models.enums.CryptoSymbol;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class ItemExAttemptDto {
 
     private LocalDateTime createdAt;
-    private CryptoCurrency crypto;
+    private CryptoSymbol crypto;
     private int cryptoQuantity;
     private Float price;
     private Float amountARG;

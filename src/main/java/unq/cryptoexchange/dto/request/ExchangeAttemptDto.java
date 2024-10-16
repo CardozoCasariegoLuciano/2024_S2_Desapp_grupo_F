@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import unq.cryptoexchange.models.enums.CryptoCurrency;
+import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 
 @Data
@@ -14,7 +14,7 @@ import unq.cryptoexchange.models.enums.OperationType;
 @Builder
 public class ExchangeAttemptDto {
 
-    @NotBlank(message = "Person Id is required")
+    @NotNull(message = "Person Id is required")
     private Long personId;
 
     @NotBlank(message = "Name is required")
@@ -25,17 +25,15 @@ public class ExchangeAttemptDto {
     @Size(message = "The name must be between 3 and 30 characters", max = 30, min = 3)
     private String lastName;
 
-    @NotBlank(message = "Crypto is required")
-    private CryptoCurrency crypto;
+    @NotNull(message = "Crypto is required")
+    private CryptoSymbol crypto;
 
-    @NotBlank(message = "Quantity is required")
     @Min(value=1, message = "The quantity must be equal to or greater than 1")
     private int quantity;
 
-    @NotBlank(message = "Price is required")
+    @Min(value=1, message = "The price must be equal to or greater than 1")
     private Float price;
 
-    @NotBlank(message = "Type Operation is required")
+    @NotNull(message = "Type Operation is required")
     private OperationType operationType;
-    
 }

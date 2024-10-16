@@ -1,6 +1,6 @@
 package unq.cryptoexchange.models.enums;
 
-public enum CryptoCurrency {
+public enum CryptoSymbol {
     ALICEUSDT,
     MATICUSDT,
     AXSUSDT,

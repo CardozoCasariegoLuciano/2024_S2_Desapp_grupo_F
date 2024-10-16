@@ -7,7 +7,7 @@ import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
-import unq.cryptoexchange.models.enums.CryptoCurrency;
+import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 import unq.cryptoexchange.services.impl.ExchangeAttemptService;
 import unq.cryptoexchange.services.impl.PersonService;
@@ -44,7 +44,7 @@ class ExchangeAttemptServiceTest {
             .personId(person.getId())
             .name(person.getName())
             .lastName(person.getLastname())
-            .crypto(CryptoCurrency.BNBUSDT)
+            .crypto(CryptoSymbol.BNBUSDT)
             .quantity(1000)
             .price(100.0f)
             .operationType(OperationType.SELL)
