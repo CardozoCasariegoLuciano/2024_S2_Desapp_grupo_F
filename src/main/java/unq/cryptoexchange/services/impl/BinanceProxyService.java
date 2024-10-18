@@ -7,7 +7,7 @@ import unq.cryptoexchange.models.CryptoCurrency;
 @Service
 public class BinanceProxyService {
 
-    private final String BASE_URL = "https://api1.binance.com/api/v3/ticker/price?symbol=";
+    private final static String BASE_URL = "https://api1.binance.com/api/v3/ticker/price?symbol=";
     private final RestTemplate restTemplate;
 
     public BinanceProxyService() {

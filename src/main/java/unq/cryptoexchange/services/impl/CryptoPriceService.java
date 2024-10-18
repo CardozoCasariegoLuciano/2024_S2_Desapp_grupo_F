@@ -3,7 +3,6 @@ package unq.cryptoexchange.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import unq.cryptoexchange.models.CryptoCurrency;
-import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.services.CryptoPriceServiceInterface;
 
 import java.time.LocalDateTime;

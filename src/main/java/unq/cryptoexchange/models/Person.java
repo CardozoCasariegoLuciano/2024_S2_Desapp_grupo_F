@@ -61,8 +61,7 @@ public class Person {
     private String wallet;
   
     public ExchangeAttempt createAttempt(CryptoSymbol crypto, int quantity, Float price, OperationType operationType){
-        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
-        return exchangeAttempt;
+        return new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
     }
 
 

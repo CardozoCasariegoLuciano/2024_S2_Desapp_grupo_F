@@ -1,7 +1,6 @@
 package unq.cryptoexchange.services;
 
 import unq.cryptoexchange.models.CryptoCurrency;
-import unq.cryptoexchange.models.enums.CryptoSymbol;
 
 import java.util.List;
 
