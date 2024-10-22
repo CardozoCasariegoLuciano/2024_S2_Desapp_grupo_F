@@ -14,23 +14,19 @@ import unq.cryptoexchange.repository.PersonRepository;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Component
 public class DataGenerator {
+    Logger logger = Logger.getLogger(getClass().getName());
 
     @Bean
     CommandLineRunner initDatabase(PersonRepository personRepository, ExchangeAttemptRepository exchangeAttemptRepository) {
         return args -> {
-            generatePersons().forEach( person -> {
-                personRepository.save(person);
-            });
+            generatePersons().forEach(personRepository::save);
+            generateExchangeAttempts().forEach(exchangeAttemptRepository::save);
 
-            generateExchangeAttempts().forEach(atemp -> {
-                exchangeAttemptRepository.save(atemp);
-            });
-
-
-            System.out.println("Datos iniciales insertados en la base de datos.");
+            logger.info("Datos iniciales insertados en la base de datos.");
         };
     }
 
