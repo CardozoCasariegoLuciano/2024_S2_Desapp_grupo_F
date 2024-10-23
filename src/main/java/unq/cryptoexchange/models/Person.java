@@ -50,7 +50,7 @@ public class Person {
     private String password;
     
     @Min(0)
-    private Integer reputation;
+    private Integer points; 
 
     @NotBlank
     @Size(min= 22)
@@ -59,21 +59,30 @@ public class Person {
     @NotBlank
     @Size(min= 8)
     private String wallet;
+
+    public Person(String name, String lastname, String email, String address, String password, String cvu, String wallet)
+    {
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.points = 100;
+        this.cvu = cvu;
+        this.wallet = wallet;
+    }
   
     public ExchangeAttempt createAttempt(CryptoSymbol crypto, int quantity, Float price, OperationType operationType){
         return new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
     }
 
 
-    public void discountReputation(int amount){
-        this.reputation = Math.max( 0, this.reputation-amount);
+    public void discountPoints(int amount){
+        this.points = Math.max( 0, this.points-amount);
     }
 
-    public void increaseReputation(int amount){
-        this.reputation += amount;
+    public void increasePoints(int amount){
+        this.points = Math.min( 100, this.points+amount);
     }
 
-    public String getReputation(){
-        return reputation.toString();
-    }
 }

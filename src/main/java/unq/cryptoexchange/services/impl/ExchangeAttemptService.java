@@ -37,13 +37,13 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
            throw new NullPointerException("This id: " + exAttemptDto.getPersonId() + " does not exist");
         }
 
+        Person person = existPerson.get();
+
         CryptoCurrency priceCrypto = cryptoPriceService.getPrice(exAttemptDto.getCrypto().toString());
         
         if(!priceInMargin(exAttemptDto.getPrice(), priceCrypto.getPrice())){
             throw new InvalidException("This price: " + exAttemptDto.getPrice() + " is out of range ");
         }
-
-        Person person = existPerson.get();
 
         ExchangeAttempt exAttempt = person.createAttempt(
             exAttemptDto.getCrypto(),
@@ -56,7 +56,8 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         
     } 
 
-    private boolean priceInMargin(Float userPrice, Float cryptoPrice){
+    @Override 
+    public boolean priceInMargin(Float userPrice, Float cryptoPrice){
 
         float marginPrice = cryptoPrice*0.05f;
 
@@ -73,8 +74,8 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
     
         return exAttempt.stream().map(attempt -> {
             
-            //TODO: Resolver OperationCount
-            //int operationsCount = getUserOperationCount(attempt.getPersonId());
+            int operationsCount = exAttemptRepository.countStatusCloseByPersonId(attempt.getPersonId());
+            //int userReputation = personRepository.personReputation(attempt.getPersonId());
             
             return new ItemExAttemptDto(
                     attempt.getCreatedAt(),
@@ -83,26 +84,17 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
                     attempt.getPrice(),
                     attempt.getAmountArg(),
                     attempt.getNameUser(),
-                    attempt.getLastNameUser()
-                    //operationsCount,
-                    //getUserReputation(attempt.getPersonId())
+                    attempt.getLastNameUser(),
+                    operationsCount
+                    //userReputation
             );
         }).toList();
     }
 
-    /*
-    private String getUserReputation(Long personId) {
-
-        Person person = personRepository.findById(personId).get();
-
-        return person.getReputation();
+    @Override
+    public int countOperationUserId(Long personId){
+        return exAttemptRepository.countExchangeAttempByPersonId(personId);
     }
-
-
-    private int getUserOperationCount(Long personId) {
-        
-    }*/
-
 
 @Override
     public void cleanAll() {

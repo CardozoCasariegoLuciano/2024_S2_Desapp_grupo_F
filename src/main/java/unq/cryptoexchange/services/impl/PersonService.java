@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
 import unq.cryptoexchange.exceptions.DuplicatedException;
+import unq.cryptoexchange.exceptions.InvalidException;
 import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.PersonServiceInterface;
@@ -39,6 +40,20 @@ public class PersonService implements PersonServiceInterface {
             .build();
 
         return personRepository.save(person);
+    }
+
+    @Override
+    public int personReputation(Long personId){
+        
+        Optional<Person> existPerson = this.personRepository.findById(personId);
+        if(!existPerson.isPresent()){
+           throw new InvalidException("This person with id: "  + personId + "not exist");
+        }
+
+        //int op = this.personRepository.countClosedOrCancelledAttemptsByPersonId(personId);
+        
+        return existPerson.get().getPoints()/100;
+
     }
 
     @Override

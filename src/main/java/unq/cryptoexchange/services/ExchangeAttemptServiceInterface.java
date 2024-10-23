@@ -8,7 +8,9 @@ import java.util.List;
 public interface ExchangeAttemptServiceInterface {
 
     ExchangeAttempt saveExchangeAttempt(ExchangeAttemptDto exAttemptDto);
+    boolean priceInMargin(Float userPrice, Float cryptoPrice);
     List<ItemExAttemptDto> getAllExchangeAttempt();
+    int countOperationUserId(Long personId);
     void cleanAll();
 
 }
