@@ -50,7 +50,7 @@ jobs:
         - name: Run tests with Jacoco coverage
           run: mvn test jacoco:report
         - name: Upload coverage report
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: coverage-report
             path: target/site/jacoco  
