@@ -72,3 +72,31 @@ jobs:
         with:
           name: coverage-report
           path: target/site/jacoco
+
+  check-coverage:
+      name: Check Coverage Threshold
+      runs-on: ubuntu-latest
+      needs: sonarcloud 
+      steps:
+        - name: Fetch Coverage Percentage
+          id: fetch_coverage
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          run: |
+            coverage=$(curl -s -u "$SONAR_TOKEN:" "https://sonarcloud.io/api/measures/component?component=unq.CryptoExchange:CryptoExchange&metricKeys=coverage" | jq '.component.measures[0].value')
+            echo "Coverage percentage is $coverage"
+            if (( $(echo "$coverage < 85" | bc -l) )); then
+              echo "::set-output name=alert::true"
+            else
+              echo "::set-output name=alert::false"
+            fi
+  
+        - name: Update README with Coverage Alert
+          if: steps.fetch_coverage.outputs.alert == 'true'
+          run: |
+            echo "⚠️ **Alert: Code coverage is below 85%!**" >> README.md
+            git config --global user.name 'github-actions'
+            git config --global user.email 'github-actions@github.com'
+            git add README.md
+            git commit -m "Add coverage alert to README"
+            git push
