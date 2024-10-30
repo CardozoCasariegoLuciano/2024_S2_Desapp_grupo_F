@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder.Default;
 import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 
@@ -50,7 +51,8 @@ public class Person {
     private String password;
     
     @Min(0)
-    private Integer points; 
+    @Default
+    private Integer points = 100; 
 
     @NotBlank
     @Size(min= 22)
@@ -59,19 +61,7 @@ public class Person {
     @NotBlank
     @Size(min= 8)
     private String wallet;
-
-    public Person(String name, String lastname, String email, String address, String password, String cvu, String wallet)
-    {
-        this.name = name;
-        this.lastname = lastname;
-        this.email = email;
-        this.address = address;
-        this.password = password;
-        this.points = 100;
-        this.cvu = cvu;
-        this.wallet = wallet;
-    }
-  
+ 
     public ExchangeAttempt createAttempt(CryptoSymbol crypto, int quantity, Float price, OperationType operationType){
         return new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
     }

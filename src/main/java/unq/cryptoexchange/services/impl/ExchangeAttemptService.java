@@ -75,7 +75,7 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         return exAttempt.stream().map(attempt -> {
             
             int operationsCount = exAttemptRepository.countStatusCloseByPersonId(attempt.getPersonId());
-            //int userReputation = personRepository.personReputation(attempt.getPersonId());
+            int userReputation = personRepository.getPointsById(attempt.getPersonId());
             
             return new ItemExAttemptDto(
                     attempt.getCreatedAt(),
@@ -85,8 +85,8 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
                     attempt.getAmountArg(),
                     attempt.getNameUser(),
                     attempt.getLastNameUser(),
-                    operationsCount
-                    //userReputation
+                    operationsCount,
+                    userReputation
             );
         }).toList();
     }

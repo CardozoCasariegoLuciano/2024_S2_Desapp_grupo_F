@@ -50,9 +50,9 @@ public class PersonService implements PersonServiceInterface {
            throw new InvalidException("This person with id: "  + personId + "not exist");
         }
 
-        //int op = this.personRepository.countClosedOrCancelledAttemptsByPersonId(personId);
+        int op = this.personRepository.countClosedOrCancelledAttemptsByPersonId(personId);
         
-        return existPerson.get().getPoints()/100;
+        return existPerson.get().getPoints()/op;
 
     }
 

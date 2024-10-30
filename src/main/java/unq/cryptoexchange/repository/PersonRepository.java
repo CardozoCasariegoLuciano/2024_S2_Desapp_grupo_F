@@ -11,11 +11,14 @@ import java.util.Optional;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
     public Optional<Person> findByEmail(String email);
-    //public int getReputationById(Long id); 
 
-    @Query("SELECT COUNT(p.ID) FROM PERSONS p LEFT JOIN EXCHANGE_ATTEMPTS e ON p.ID = e.PERSON_ID WHERE p.ID = :personId AND e.STATUS = 'CLOSE')")
+    @Query("SELECT p.points FROM Person p WHERE p.id = :id")
+    public int getPointsById(Long id); 
+
+    @Query("SELECT COUNT(p.id) FROM Person p LEFT JOIN ExchangeAttempt e ON p.id = e.personId WHERE p.id = :personId AND e.status = 'CLOSE'")
     int countClosedAttemptsByPersonId(Long personId);
-
-    @Query("SELECT COUNT(p.ID) FROM PERSONS p LEFT JOIN EXCHANGE_ATTEMPTS e ON p.ID = e.PERSON_ID WHERE p.id = :personId AND e.status IN ('CLOSE', 'CANCELLED')")
+    
+    @Query("SELECT COUNT(p.id) FROM Person p LEFT JOIN ExchangeAttempt e ON p.id = e.personId WHERE p.id = :personId AND e.status IN ('CLOSE', 'CANCELLED')")
     int countClosedOrCancelledAttemptsByPersonId(Long personId);
+    
 }

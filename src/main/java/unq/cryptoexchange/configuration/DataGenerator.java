@@ -38,7 +38,6 @@ public class DataGenerator {
                         .email("john.doe@example.com")
                         .address("1234 Elm Street")
                         .password("Passw0rd!")
-                        .reputation(10)
                         .cvu("1234567890123456789012")
                         .wallet("wallet123")
                         .build(),
@@ -49,7 +48,6 @@ public class DataGenerator {
                         .email("jane.smith@example.com")
                         .address("5678 Oak Avenue")
                         .password("Str0ngPwd!")
-                        .reputation(15)
                         .cvu("2345678901234567890123")
                         .wallet("wallet456")
                         .build(),
@@ -60,7 +58,6 @@ public class DataGenerator {
                         .email("alice.johnson@example.com")
                         .address("9102 Pine Road")
                         .password("Al1cePwd!")
-                        .reputation(8)
                         .cvu("3456789012345678901234")
                         .wallet("wallet789")
                         .build(),
@@ -71,7 +68,6 @@ public class DataGenerator {
                         .email("bob.williams@example.com")
                         .address("3456 Maple Drive")
                         .password("Bob$ecure1")
-                        .reputation(12)
                         .cvu("4567890123456789012345")
                         .wallet("wallet321")
                         .build(),
@@ -82,7 +78,6 @@ public class DataGenerator {
                         .email("charlie.brown@example.com")
                         .address("7890 Cedar Lane")
                         .password("CharL!3pw")
-                        .reputation(5)
                         .cvu("5678901234567890123456")
                         .wallet("wallet654")
                         .build()
