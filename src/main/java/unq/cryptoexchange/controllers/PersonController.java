@@ -22,7 +22,7 @@ public class PersonController {
         this.personService = personService;
     }
 
-     @Operation(
+    @Operation(
         summary = "Register a new user",
         description = "This endpoint registers a new user in the system by providing the user's information. The email must be unique."
     )
