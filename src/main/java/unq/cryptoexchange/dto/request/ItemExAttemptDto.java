@@ -22,6 +22,6 @@ public class ItemExAttemptDto {
     private String userName;
     private String userLastname;
     private int userOperationsCount;
-    private int userReputation;    
+    private String userReputation;    
 
 }

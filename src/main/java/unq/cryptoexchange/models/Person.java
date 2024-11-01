@@ -66,13 +66,24 @@ public class Person {
         return new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
     }
 
-
     public void discountPoints(int amount){
         this.points = Math.max( 0, this.points-amount);
     }
 
     public void increasePoints(int amount){
         this.points = Math.min( 100, this.points+amount);
+    }
+
+    public String getReputation(int cantOp){
+
+        String reputation = "Sin Operaciones";
+
+        if(cantOp != 0){
+            int calcuteReputation = this.points/cantOp;
+            reputation = String.valueOf(calcuteReputation) ;
+        }
+
+        return reputation;
     }
 
 }

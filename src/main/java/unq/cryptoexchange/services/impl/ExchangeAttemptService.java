@@ -17,13 +17,14 @@ import java.util.Optional;
 
 @Service
 public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
-    
+
     private final ExchangeAttemptRepository exAttemptRepository;
     private final PersonRepository personRepository;
     private final CryptoPriceService cryptoPriceService;
 
     @Autowired
-    public ExchangeAttemptService(PersonRepository personRepository, ExchangeAttemptRepository exAttemptRepository, CryptoPriceService cryptoPriceService) {
+    public ExchangeAttemptService(PersonRepository personRepository, ExchangeAttemptRepository exAttemptRepository,
+            CryptoPriceService cryptoPriceService) {
         this.personRepository = personRepository;
         this.exAttemptRepository = exAttemptRepository;
         this.cryptoPriceService = cryptoPriceService;
@@ -33,33 +34,32 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
     public ExchangeAttempt saveExchangeAttempt(ExchangeAttemptDto exAttemptDto) {
 
         Optional<Person> existPerson = personRepository.findById(exAttemptDto.getPersonId());
-        if(existPerson.isEmpty()){
-           throw new NullPointerException("This id: " + exAttemptDto.getPersonId() + " does not exist");
+        if (existPerson.isEmpty()) {
+            throw new NullPointerException("This id: " + exAttemptDto.getPersonId() + " does not exist");
         }
 
         Person person = existPerson.get();
 
         CryptoCurrency priceCrypto = cryptoPriceService.getPrice(exAttemptDto.getCrypto().toString());
-        
-        if(!priceInMargin(exAttemptDto.getPrice(), priceCrypto.getPrice())){
+
+        if (!priceInMargin(exAttemptDto.getPrice(), priceCrypto.getPrice())) {
             throw new InvalidException("This price: " + exAttemptDto.getPrice() + " is out of range ");
         }
 
         ExchangeAttempt exAttempt = person.createAttempt(
-            exAttemptDto.getCrypto(),
-            exAttemptDto.getQuantity(),
-            exAttemptDto.getPrice(),
-            exAttemptDto.getOperationType()
-        );
+                exAttemptDto.getCrypto(),
+                exAttemptDto.getQuantity(),
+                exAttemptDto.getPrice(),
+                exAttemptDto.getOperationType());
 
         return exAttemptRepository.save(exAttempt);
-        
-    } 
 
-    @Override 
-    public boolean priceInMargin(Float userPrice, Float cryptoPrice){
+    }
 
-        float marginPrice = cryptoPrice*0.05f;
+    @Override
+    public boolean priceInMargin(Float userPrice, Float cryptoPrice) {
+
+        float marginPrice = cryptoPrice * 0.05f;
 
         float maxPrice = cryptoPrice + marginPrice;
         float minPrice = cryptoPrice - marginPrice;
@@ -69,14 +69,15 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
 
     @Override
     public List<ItemExAttemptDto> getAllExchangeAttempt() {
-        
+
         List<ExchangeAttempt> exAttempt = exAttemptRepository.findByStatus(AttemptStatus.OPEN);
-    
+
         return exAttempt.stream().map(attempt -> {
-            
-            int operationsCount = exAttemptRepository.countStatusCloseByPersonId(attempt.getPersonId());
-            int userReputation = personRepository.getPointsById(attempt.getPersonId());
-            
+
+            Person person = personRepository.findById(attempt.getPersonId()).get();
+            int operationsClose = exAttemptRepository.countStatusCloseByPersonId(attempt.getPersonId());
+            int operationsFinished = exAttemptRepository.countExchangeAttempByPersonId(attempt.getPersonId());
+
             return new ItemExAttemptDto(
                     attempt.getCreatedAt(),
                     attempt.getCrypto(),
@@ -85,18 +86,17 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
                     attempt.getAmountArg(),
                     attempt.getNameUser(),
                     attempt.getLastNameUser(),
-                    operationsCount,
-                    userReputation
-            );
+                    operationsClose,
+                    person.getReputation(operationsFinished));
         }).toList();
     }
 
     @Override
-    public int countOperationUserId(Long personId){
+    public int countOperationUserId(Long personId) {
         return exAttemptRepository.countExchangeAttempByPersonId(personId);
     }
 
-@Override
+    @Override
     public void cleanAll() {
         exAttemptRepository.deleteAll();
     }
