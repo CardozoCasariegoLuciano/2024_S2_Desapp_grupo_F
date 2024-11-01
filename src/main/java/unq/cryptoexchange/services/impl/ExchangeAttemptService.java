@@ -35,14 +35,15 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
 
         Optional<Person> existPerson = personRepository.findById(exAttemptDto.getPersonId());
         if (existPerson.isEmpty()) {
-            throw new NullPointerException("This id: " + exAttemptDto.getPersonId() + " does not exist");
+            throw new NullPointerException("This PersonId: " + exAttemptDto.getPersonId() + " does not exist");
         }
 
         Person person = existPerson.get();
 
         CryptoCurrency priceCrypto = cryptoPriceService.getPrice(exAttemptDto.getCrypto().toString());
-
-        if (!priceInMargin(exAttemptDto.getPrice(), priceCrypto.getPrice())) {
+        boolean priceInMargin = priceCrypto.priceInMargin(exAttemptDto.getPrice());
+        
+        if (!priceInMargin) {
             throw new InvalidException("This price: " + exAttemptDto.getPrice() + " is out of range ");
         }
 
@@ -54,17 +55,6 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
 
         return exAttemptRepository.save(exAttempt);
 
-    }
-
-    @Override
-    public boolean priceInMargin(Float userPrice, Float cryptoPrice) {
-
-        float marginPrice = cryptoPrice * 0.05f;
-
-        float maxPrice = cryptoPrice + marginPrice;
-        float minPrice = cryptoPrice - marginPrice;
-
-        return userPrice >= minPrice && userPrice <= maxPrice;
     }
 
     @Override
@@ -89,11 +79,6 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
                     operationsClose,
                     person.getReputation(operationsFinished));
         }).toList();
-    }
-
-    @Override
-    public int countOperationUserId(Long personId) {
-        return exAttemptRepository.countExchangeAttempByPersonId(personId);
     }
 
     @Override
