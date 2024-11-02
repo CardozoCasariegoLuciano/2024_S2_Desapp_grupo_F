@@ -21,13 +21,15 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
     private final ExchangeAttemptRepository exAttemptRepository;
     private final PersonRepository personRepository;
     private final CryptoPriceService cryptoPriceService;
+    private final CryptoHoldingService cryptoHoldingService;
 
     @Autowired
     public ExchangeAttemptService(PersonRepository personRepository, ExchangeAttemptRepository exAttemptRepository,
-            CryptoPriceService cryptoPriceService) {
+            CryptoPriceService cryptoPriceService, CryptoHoldingService cryptoHoldingService) {
         this.personRepository = personRepository;
         this.exAttemptRepository = exAttemptRepository;
         this.cryptoPriceService = cryptoPriceService;
+        this.cryptoHoldingService = cryptoHoldingService;
     }
 
     @Override
@@ -36,6 +38,10 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         Optional<Person> existPerson = personRepository.findById(exAttemptDto.getPersonId());
         if (existPerson.isEmpty()) {
             throw new NullPointerException("This PersonId: " + exAttemptDto.getPersonId() + " does not exist");
+        }
+
+        if(cryptoHoldingService.personHaveThisCant(exAttemptDto.getPersonId(), exAttemptDto.getCrypto(), exAttemptDto.getQuantity())){
+            throw new InvalidException("This person with Id: " + exAttemptDto.getPersonId() + " does not have this amount of this crypto available");
         }
 
         Person person = existPerson.get();

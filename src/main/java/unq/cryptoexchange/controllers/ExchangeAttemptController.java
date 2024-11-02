@@ -53,7 +53,7 @@ public class ExchangeAttemptController {
 
     @Operation(
         summary = "Get all ExchangeAttempts",
-        description = "Retrieve a list of all ExchangeAttempts in the system, regardless of their status."
+        description = "Return a list of all ExchangeAttempts in the system with status OPEN."
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Exchange attempts retrieved successfully",
