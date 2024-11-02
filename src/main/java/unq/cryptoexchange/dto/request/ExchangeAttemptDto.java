@@ -31,7 +31,7 @@ public class ExchangeAttemptDto {
     @Min(value=1, message = "The quantity must be equal to or greater than 1")
     private int quantity;
 
-    @Min(value=1, message = "The price must be equal to or greater than 1")
+    @Min(value=0, message = "The price must be equal to or greater than 0")
     private Float price;
 
     @NotNull(message = "Type Operation is required")

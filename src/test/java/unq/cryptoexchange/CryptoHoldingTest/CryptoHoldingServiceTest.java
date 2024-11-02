@@ -36,7 +36,7 @@ public class CryptoHoldingServiceTest {
     @Test
     public void test_01_PersonHaveThisCant() {
 
-        when(cryptoRepository.getQuantityCryptoUser(testPersonId, testCrypto)).thenReturn(10);
+        when(cryptoRepository.getQuantityCryptoPerson(testPersonId, testCrypto)).thenReturn(10);
 
         assertTrue(cryptoService.personHaveThisCant(testPersonId, testCrypto, 5));
         assertTrue(cryptoService.personHaveThisCant(testPersonId, testCrypto, 10));
@@ -46,7 +46,7 @@ public class CryptoHoldingServiceTest {
     @Test
     public void test_02_PersonNotHaveThisCant() {
 
-        when(cryptoRepository.getQuantityCryptoUser(testPersonId, testCrypto)).thenReturn(3);
+        when(cryptoRepository.getQuantityCryptoPerson(testPersonId, testCrypto)).thenReturn(3);
 
         assertFalse(cryptoService.personHaveThisCant(testPersonId, testCrypto, 5));
     }

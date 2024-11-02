@@ -9,6 +9,6 @@ import unq.cryptoexchange.models.enums.CryptoSymbol;
 public interface CryptoHoldingRepository extends JpaRepository<CryptoHolding, Long> {
     
     @Query("SELECT quantity FROM CryptoHolding c WHERE c.cryptoSymbol = :crypto AND c.personId = :personId")
-    public int getQuantityCryptoUser(Long personId, CryptoSymbol crypto);
+    public int getQuantityCryptoPerson(Long personId, CryptoSymbol crypto);
 
 }

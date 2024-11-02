@@ -21,7 +21,7 @@ public class CryptoHoldingService implements CryptoHoldingServiceInterface {
     @Override
     public boolean personHaveThisCant(Long personId, CryptoSymbol crypto, int qty) {
         
-        int qtyPerson = cryptoRepository.getQuantityCryptoUser(personId, crypto);
+        int qtyPerson = cryptoRepository.getQuantityCryptoPerson(personId, crypto);
 
         return qtyPerson >= qty;
     }    
