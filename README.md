@@ -56,11 +56,11 @@ Las operaciones de movimientos de dinero o cripto activos quedan por fuera de la
 | Implementar JOB de Coverage                                                                                     | ✅      |
 | Testing de endpoints usando Postman                                                                             | ✅      |
 | *Funcionalidad*                                                                                              |        |
-| Listar cotización de criptoactivos                                                                              | ❌      |
+| Listar cotización de criptoactivos                                                                              | ✅      |
 | Permitir que un usuario exprese su intención de compra/venta                                                    | ✅      |
 | Construir un listado donde se muestran las intenciones activas de compra/venta                                  | ✅      |
 | Procesar la transacción informada por un usuario                                                                | ❌      |
 | Informar al usuario el volumen operado de criptoactivos entre dos fechas                                        | ✅      |
-| Testing integral de 2 controllers (end-to-end)                                                                  | ❌      |
+| Testing integral de 2 controllers (end-to-end)                                                                  | ✅      |
 
 
