@@ -14,7 +14,7 @@ import unq.cryptoexchange.repository.CryptoHoldingRepository;
 import unq.cryptoexchange.services.impl.CryptoHoldingService;
 
 @SpringBootTest
-public class CryptoHoldingServiceTest {
+class CryptoHoldingServiceTest {
     
     @Mock
     private CryptoHoldingRepository cryptoRepository;
@@ -34,7 +34,7 @@ public class CryptoHoldingServiceTest {
     }
 
     @Test
-    public void test_01_PersonHaveThisCant() {
+    void test_01_PersonHaveThisCant() {
 
         when(cryptoRepository.getQuantityCryptoPerson(testPersonId, testCrypto)).thenReturn(10);
 
@@ -44,7 +44,7 @@ public class CryptoHoldingServiceTest {
     }
 
     @Test
-    public void test_02_PersonNotHaveThisCant() {
+    void test_02_PersonNotHaveThisCant() {
 
         when(cryptoRepository.getQuantityCryptoPerson(testPersonId, testCrypto)).thenReturn(3);
 
