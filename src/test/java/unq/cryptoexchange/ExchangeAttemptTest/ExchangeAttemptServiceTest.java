@@ -27,6 +27,7 @@ import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
+import unq.cryptoexchange.services.impl.CryptoHoldingService;
 import unq.cryptoexchange.services.impl.CryptoPriceService;
 import unq.cryptoexchange.services.impl.ExchangeAttemptService;
 
@@ -38,6 +39,9 @@ class ExchangeAttemptServiceTest {
 
     @Mock
     private CryptoPriceService cryptoPriceService;
+
+    @Mock
+    private CryptoHoldingService cryptoHoldingService;
 
     @Mock
     private ExchangeAttemptRepository exAttemptRepository;
@@ -105,6 +109,7 @@ class ExchangeAttemptServiceTest {
     void test_01_SuccesfullySaveExAttempt(){
 
         when(personRepository.findById(personTest.getId())).thenReturn(Optional.of(personTest));
+        when(cryptoHoldingService.personHaveThisCant(personTest.getId(), CryptoSymbol.BNBUSDT, exAttemptTestA.getQuantity())).thenReturn(true);
 
         CryptoCurrency mockCrypto = new CryptoCurrency("BNBUSDT", 579.50f, null);
         when(cryptoPriceService.getPrice("BNBUSDT")).thenReturn(mockCrypto);
@@ -128,6 +133,7 @@ class ExchangeAttemptServiceTest {
     void test_02_SaveExchangeAttempt_PriceOutOfRange() {
         
         when(personRepository.findById(personTest.getId())).thenReturn(Optional.of(personTest));
+        when(cryptoHoldingService.personHaveThisCant(personTest.getId(), CryptoSymbol.BNBUSDT, exAttemptTestA.getQuantity())).thenReturn(true);
         
         CryptoCurrency mockCrypto = new CryptoCurrency("BNBUSDT", 100.0f,null);
         when(cryptoPriceService.getPrice("BNBUSDT")).thenReturn(mockCrypto);
@@ -161,7 +167,7 @@ class ExchangeAttemptServiceTest {
 
         List<ItemExAttemptDto> result = exchangeAttemptService.getAllExchangeAttempt();
 
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
         ItemExAttemptDto dto = result.get(0);
         assertEquals("Test", dto.getUserName());
         assertEquals("LastTest", dto.getUserLastname());
@@ -199,5 +205,21 @@ class ExchangeAttemptServiceTest {
         verify(personRepository, times(2)).findById(personTest.getId());
         verify(exAttemptRepository, times(2)).countStatusCloseByPersonId(personTest.getId());
         verify(exAttemptRepository, times(2)).countExchangeAttempByPersonId(personTest.getId());
+    }
+
+    @Test
+    void test_05_SaveExchangeAttempt_WhithOutCryptoCurrency() {
+        
+        when(personRepository.findById(personTest.getId())).thenReturn(Optional.of(personTest));
+        when(cryptoHoldingService.personHaveThisCant(personTest.getId(), CryptoSymbol.BNBUSDT, exAttemptTestA.getQuantity())).thenReturn(false);
+        
+        CryptoCurrency mockCrypto = new CryptoCurrency("BNBUSDT", 100.0f,null);
+        when(cryptoPriceService.getPrice("BNBUSDT")).thenReturn(mockCrypto);
+
+        InvalidException exception = assertThrows(InvalidException.class, () -> {
+            exchangeAttemptService.saveExchangeAttempt(exAttemptTestA);
+        });
+
+        assertEquals("This person with Id: null does not have this amount of this crypto available", exception.getMessage());
     }
 }
