@@ -14,6 +14,7 @@ import unq.cryptoexchange.repository.CryptoHoldingRepository;
 import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -101,6 +102,8 @@ public class DataGenerator {
                         .createdAt(LocalDateTime.now().minusDays(2))
                         .status(AttemptStatus.OPEN)
                         .operationType(OperationType.BUY)
+                        .requestingUserID(null)
+                        .lastUpdate(null)
                         .build(),
 
                 ExchangeAttempt.builder()
@@ -114,6 +117,8 @@ public class DataGenerator {
                         .createdAt(LocalDateTime.now().minusHours(5))
                         .status(AttemptStatus.OPEN)
                         .operationType(OperationType.SELL)
+                        .requestingUserID(null)
+                        .lastUpdate(null)
                         .build(),
 
                 ExchangeAttempt.builder()
@@ -127,6 +132,8 @@ public class DataGenerator {
                         .createdAt(LocalDateTime.now().minusWeeks(1))
                         .status(AttemptStatus.OPEN)
                         .operationType(OperationType.BUY)
+                        .requestingUserID(null)
+                        .lastUpdate(null)
                         .build(),
 
                 ExchangeAttempt.builder()
@@ -140,6 +147,8 @@ public class DataGenerator {
                         .createdAt(LocalDateTime.now().minusDays(10))
                         .status(AttemptStatus.OPEN)
                         .operationType(OperationType.SELL)
+                        .requestingUserID(null)
+                        .lastUpdate(null)
                         .build(),
 
                 ExchangeAttempt.builder()
@@ -153,6 +162,23 @@ public class DataGenerator {
                         .createdAt(LocalDateTime.now().minusMinutes(30))
                         .status(AttemptStatus.OPEN)
                         .operationType(OperationType.BUY)
+                        .requestingUserID(null)
+                        .lastUpdate(null)
+                        .build(),
+
+                ExchangeAttempt.builder()
+                        .personId(5L)
+                        .nameUser("Charlie")
+                        .lastNameUser("Brown")
+                        .crypto(CryptoSymbol.AAVEUSDT)
+                        .cryptoQuantity(3)
+                        .price(300.00f)
+                        .amountArg(900.00f)
+                        .createdAt(LocalDateTime.now().minusMinutes(30))
+                        .status(AttemptStatus.CLOSE)
+                        .operationType(OperationType.BUY)
+                        .requestingUserID(1L)
+                        .lastUpdate(LocalDate.of(2024,10, 25))
                         .build()
         );
     }

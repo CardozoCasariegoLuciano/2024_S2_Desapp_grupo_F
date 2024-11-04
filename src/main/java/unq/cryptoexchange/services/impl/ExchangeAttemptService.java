@@ -87,6 +87,11 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         }).toList();
     }
 
+    //TODO Endpoint para aceptar una ExchangeAttemp
+    //TODO Endpoint para Cancelar una ExchangeAttemp
+    //TODO Endpoint para confirmar una ExchangeAttemp
+
+
     @Override
     public void cleanAll() {
         exAttemptRepository.deleteAll();

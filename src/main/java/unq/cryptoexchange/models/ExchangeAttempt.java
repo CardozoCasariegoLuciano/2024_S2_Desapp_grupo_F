@@ -9,6 +9,7 @@ import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -35,6 +36,8 @@ public class ExchangeAttempt {
     private AttemptStatus status;
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
+    private Long requestingUserID = null;
+    private LocalDate lastUpdate = null;
 
 
     public ExchangeAttempt(Float price, int cryptoQuantity, CryptoSymbol crypto, Long personId, String nameUser, String lastNameUser, OperationType operationType) {
