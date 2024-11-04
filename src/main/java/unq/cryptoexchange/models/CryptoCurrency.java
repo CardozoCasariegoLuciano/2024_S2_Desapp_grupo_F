@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import unq.cryptoexchange.models.enums.CryptoSymbol;
 
 @Entity
 @Data
@@ -20,4 +19,13 @@ public class CryptoCurrency {
     private Float price;
     private String lastUpdateDateAndTime;
 
+    public boolean priceInMargin(Float userPrice) {
+
+        float marginPrice = price * 0.05f;
+
+        float maxPrice = price + marginPrice;
+        float minPrice = price - marginPrice;
+
+        return userPrice >= minPrice && userPrice <= maxPrice;
+    }
 }

@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder.Default;
 import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 
@@ -50,7 +51,8 @@ public class Person {
     private String password;
     
     @Min(0)
-    private Integer reputation;
+    @Default
+    private Integer points = 100; 
 
     @NotBlank
     @Size(min= 22)
@@ -59,22 +61,29 @@ public class Person {
     @NotBlank
     @Size(min= 8)
     private String wallet;
-  
+ 
     public ExchangeAttempt createAttempt(CryptoSymbol crypto, int quantity, Float price, OperationType operationType){
-        ExchangeAttempt exchangeAttempt = new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
-        return exchangeAttempt;
+        return new ExchangeAttempt(price, quantity, crypto, this.id, this.name, this.lastname, operationType);
     }
 
-
-    public void discountReputation(int amount){
-        this.reputation = Math.max( 0, this.reputation-amount);
+    public void discountPoints(int amount){
+        this.points = Math.max( 0, this.points-amount);
     }
 
-    public void increaseReputation(int amount){
-        this.reputation += amount;
+    public void increasePoints(int amount){
+        this.points = Math.min( 100, this.points+amount);
     }
 
-    public String getReputation(){
-        return reputation.toString();
+    public String getReputation(int cantOp){
+
+        String reputation = "Sin Operaciones";
+
+        if(cantOp != 0){
+            int calcuteReputation = this.points/cantOp;
+            reputation = String.valueOf(calcuteReputation) ;
+        }
+
+        return reputation;
     }
+
 }

@@ -36,6 +36,6 @@ public class Exchange {
 
     public void cancelTransaction(Person cancellingUser){
         this.exchangeAttempt.setStatus(AttemptStatus.CANCELLED);
-        cancellingUser.discountReputation(20);
+        cancellingUser.discountPoints(20);
     }
 }

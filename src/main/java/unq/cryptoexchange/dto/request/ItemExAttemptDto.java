@@ -21,7 +21,7 @@ public class ItemExAttemptDto {
     private Float amountARG;
     private String userName;
     private String userLastname;
-    //private int userOperationsCount;
-    //private String userReputation;    
+    private int userOperationsCount;
+    private String userReputation;    
 
 }

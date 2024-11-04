@@ -36,4 +36,24 @@ class PersonModelTest {
         exchange.makeTransfer();
         Assertions.assertEquals(AttemptStatus.PENDING, attempt.getStatus());
     }
+
+    @Test
+    void test_03_PersonGetReputationWithoutOp() {
+        
+        Person personA = new Person();
+        
+        String rep = personA.getReputation(0);
+
+        Assertions.assertEquals("Sin Operaciones", rep);
+    }
+
+    @Test
+    void test_03_PersonGetReputationWithOp() {
+        
+        Person personA = new Person();
+        
+        String rep = personA.getReputation(10);
+
+        Assertions.assertEquals("10", rep);
+    }
 }

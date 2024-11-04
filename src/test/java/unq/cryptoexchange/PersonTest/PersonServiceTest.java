@@ -210,6 +210,23 @@ class PersonServiceTest {
         Assertions.assertTrue(exception.getMessage().contains("propertyPath=wallet"));
     }
 
+    @Test
+    void test_11_getPersonReputation() {
+        PersonRegistrationDto personDto = PersonRegistrationDto.builder()
+                .name("Test")
+                .lastname("LastTest")
+                .email("test.test@example.com")
+                .address("Test 123")
+                .password("unaPassword123!")
+                .cvu("2231456789954442334123")
+                .wallet("123456789")
+                .build();
+
+        Person savedPerson = personService.savePerson(personDto);
+
+        Assertions.assertEquals(100, savedPerson.getPoints());
+    }
+
     @AfterEach
     void clearAll() {
         this.personService.cleanAll();

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CyptoController.class)
-public class CryptoControllerTest {
+class CryptoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -27,7 +27,7 @@ public class CryptoControllerTest {
     private CryptoPriceService cryptoPriceService;
 
     @Test
-    public void test_01_getCryptoPrice() throws Exception {
+    void test_01_getCryptoPrice() throws Exception {
 
         String symbol = "BTCUSDT";
         CryptoCurrency mockCrypto = new CryptoCurrency(symbol, 65000.50f, "2024-01-01T12:00:00");
