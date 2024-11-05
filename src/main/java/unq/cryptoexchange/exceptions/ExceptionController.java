@@ -47,4 +47,11 @@ public class ExceptionController {
         resp.put("Error", ex.getMessage());
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ExchangeOutOfRange.class)
+    public ResponseEntity<HashMap<String, String>> exchangeOutOfRange(ExchangeOutOfRange ex){
+        HashMap<String, String> resp = new HashMap<>();
+        resp.put("Error", ex.getMessage());
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    }
 }

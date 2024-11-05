@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
 import unq.cryptoexchange.dto.request.ItemExAttemptDto;
+import unq.cryptoexchange.exceptions.ExchangeOutOfRange;
 import unq.cryptoexchange.exceptions.InvalidException;
+import unq.cryptoexchange.exceptions.NotFoundExceptions;
 import unq.cryptoexchange.models.CryptoCurrency;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
@@ -12,6 +14,8 @@ import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.ExchangeAttemptServiceInterface;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +79,7 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
             int operationsFinished = exAttemptRepository.countExchangeAttempByPersonId(attempt.getPersonId());
 
             return new ItemExAttemptDto(
+                    attempt.getAttemptId(),
                     attempt.getCreatedAt(),
                     attempt.getCrypto(),
                     attempt.getCryptoQuantity(),
@@ -87,13 +92,56 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         }).toList();
     }
 
-    //TODO Endpoint para aceptar una ExchangeAttemp
     //TODO Endpoint para Cancelar una ExchangeAttemp
-    //TODO Endpoint para confirmar una ExchangeAttemp
 
 
     @Override
     public void cleanAll() {
         exAttemptRepository.deleteAll();
+    }
+
+    @Override
+    public void acceptAttemp(Long attempID, Long userID) {
+        Optional<ExchangeAttempt> attemp = this.exAttemptRepository.findById(attempID);
+        Optional<Person> person = this.personRepository.findById(userID);
+
+        if(attemp.isEmpty() || person.isEmpty()){
+            throw new NotFoundExceptions("No se encontro el usuario o el exchange");
+        }
+
+        //Validar que la exchange no este previamente abierta
+        //Validar que uno no pueda aceptar su propia exchange
+
+        ExchangeAttempt exchange = attemp.get();
+
+        exchange.setRequestingUserID(userID);
+        exchange.setLastUpdate(LocalDate.now());
+        exchange.setStatus(AttemptStatus.PENDING);
+        this.exAttemptRepository.save(exchange);
+
+        //TODO aumentar las reputaciones
+    }
+
+    @Override
+    public void confirmAttemp(Long attempID, Long userID) {
+        //TODO validar que todos los ID esten OK
+        //TODO Validar que sea una Exchange valida
+
+        //TODO cancelar si el valor de mercado esta por arriba o por abajo
+        //del 5% de lo que pide el usuario (sin penalizar a nadie)
+        if(false){
+            throw new ExchangeOutOfRange("El valor del cripto activo se alejo mucho del valor esperado");
+        }
+
+        //TODO Actualiar la exchange
+    }
+
+    @Override
+    public void cancelAttemp(Long attempID, Long userID) {
+        //TODO validar que todos los ID esten OK
+        //TODO Validar que sea una Exchange valida
+        //TODO validar que el usuario pertenezca al exchange
+        //TODO restar reputacion
+        //TODO Actualiar la exchange
     }
 }

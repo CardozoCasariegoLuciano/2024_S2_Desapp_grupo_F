@@ -11,4 +11,9 @@ public interface ExchangeAttemptServiceInterface {
     List<ItemExAttemptDto> getAllExchangeAttempt();
     void cleanAll();
 
+    void acceptAttemp(Long attempID, Long userID);
+
+    void confirmAttemp(Long attempID, Long userID);
+
+    void cancelAttemp(Long attempID, Long userID);
 }
