@@ -73,13 +73,13 @@ public class PersonService implements PersonServiceInterface {
             throw new NotFoundExceptions("No se encontro a la persona con ID" + personID);
         }
 
-        LocalDate init_Date;
-        LocalDate end_Date;
+        LocalDate parceInitDate;
+        LocalDate parceEndDate;
         try {
-            init_Date = LocalDate.parse(initDate, formatter);
-            end_Date = LocalDate.parse(endDate, formatter);
+            parceInitDate = LocalDate.parse(initDate, formatter);
+            parceEndDate = LocalDate.parse(endDate, formatter);
 
-            if (init_Date.isAfter(end_Date)) {
+            if (parceInitDate.isAfter(parceEndDate)) {
                 throw new InvalidException("La fecha de inicio tiene que ser posterior a la fecha final");
             }
         } catch (InvalidException e) {
@@ -88,7 +88,7 @@ public class PersonService implements PersonServiceInterface {
             throw new InvalidException("las fechas no cumplen el formato dd/MM/yyyy");
         }
 
-        List<ExchangeAttempt> list = this.exchangeAttemptRepository.findExchangesRelatedWidthUser(personID, init_Date, end_Date);
+        List<ExchangeAttempt> list = this.exchangeAttemptRepository.findExchangesRelatedWidthUser(personID, parceInitDate, parceEndDate);
 
         double[] totals = {0, 0}; //[0] == us_total || [1] == arg_total
         List<UserSingleOperationDto> operations = new java.util.ArrayList<>(List.of());

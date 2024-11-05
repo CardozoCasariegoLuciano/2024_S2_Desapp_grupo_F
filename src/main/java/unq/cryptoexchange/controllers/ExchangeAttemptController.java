@@ -69,20 +69,20 @@ public class ExchangeAttemptController {
     }
 
     @PostMapping("{attempID}/accept/{userID}")
-    public ResponseEntity<?> acceptAttemp(@PathVariable Long attempID, @PathVariable Long userID){
+    public ResponseEntity<String> acceptAttemp(@PathVariable Long attempID, @PathVariable Long userID){
         this.exchangeAttemptService.acceptAttemp(attempID, userID);
-        return new ResponseEntity("Exchange aceptada correctamente", HttpStatus.OK);
+        return new ResponseEntity<>("Exchange aceptada correctamente", HttpStatus.OK);
     }
 
     @PostMapping("{attempID}/confirm/{userID}")
-    public ResponseEntity<?> confirmAttemp(@PathVariable Long attempID, @PathVariable Long userID){
+    public ResponseEntity<String> confirmAttemp(@PathVariable Long attempID, @PathVariable Long userID){
         this.exchangeAttemptService.confirmAttemp(attempID, userID);
-        return new ResponseEntity("Exchange confirmada correctamente", HttpStatus.OK);
+        return new ResponseEntity<>("Exchange confirmada correctamente", HttpStatus.OK);
     }
 
     @PostMapping("{attempID}/cancel/{userID}")
-    public ResponseEntity<?> cancelAttemp(@PathVariable Long attempID, @PathVariable Long userID){
+    public ResponseEntity<String> cancelAttemp(@PathVariable Long attempID, @PathVariable Long userID){
         this.exchangeAttemptService.cancelAttemp(attempID, userID);
-        return new ResponseEntity("Exchange confirmada correctamente", HttpStatus.OK);
+        return new ResponseEntity<>("Exchange confirmada correctamente", HttpStatus.OK);
     }
 }

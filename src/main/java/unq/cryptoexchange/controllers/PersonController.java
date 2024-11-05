@@ -56,8 +56,8 @@ public class PersonController {
 
     @Operation(summary = "User operations between tho dates")
     @PostMapping("/operations/{personID}")
-    public ResponseEntity<?> userOperations(@PathVariable Long personID, @RequestParam String init_date, @RequestParam String end_date) {
-        UserOperations operations = personService.getUserOperations(personID,init_date,end_date);
+    public ResponseEntity<UserOperations> userOperations(@PathVariable Long personID, @RequestParam String initDate, @RequestParam String endDate) {
+        UserOperations operations = personService.getUserOperations(personID,initDate,endDate);
         return new ResponseEntity<>(operations, HttpStatus.OK);
     }
 
