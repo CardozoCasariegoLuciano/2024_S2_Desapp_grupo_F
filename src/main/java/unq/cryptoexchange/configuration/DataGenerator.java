@@ -178,7 +178,7 @@ public class DataGenerator {
                         .status(AttemptStatus.CLOSE)
                         .operationType(OperationType.BUY)
                         .requestingUserID(1L)
-                        .lastUpdate(LocalDate.of(2024,10, 25))
+                        .lastUpdate(LocalDateTime.of(2024,10, 25, 10,30,10))
                         .build()
         );
     }
