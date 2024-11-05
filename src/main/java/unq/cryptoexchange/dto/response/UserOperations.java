@@ -13,16 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class UserOperations {
-    private LocalDateTime request_time;
-    private double us_total;
-    private double arg_total;
+    private LocalDateTime requestTime;
+    private double usTotal;
+    private double argTotal;
     private List<UserSingleOperationDto> operations;
 
     public UserOperations(double us_total, double arg_total, List<UserSingleOperationDto> operations){
-        this.request_time = LocalDateTime.now();
+        this.requestTime = LocalDateTime.now();
         this.operations = operations;
-        this.us_total = us_total;
-        this.arg_total = arg_total;
+        this.usTotal = us_total;
+        this.argTotal = arg_total;
     }
 }
 

@@ -12,7 +12,7 @@ import unq.cryptoexchange.models.enums.CryptoSymbol;
 @Builder
 public class UserSingleOperationDto {
     private CryptoSymbol crypto;
-    private int crypto_quantity;
-    private double current_value;
-    private double arg_total;
+    private int cryptoQuantity;
+    private double currentValue;
+    private double argTotal;
 }

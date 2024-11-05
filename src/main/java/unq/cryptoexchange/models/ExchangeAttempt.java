@@ -9,7 +9,6 @@ import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
