@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -20,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
 import unq.cryptoexchange.dto.request.ItemExAttemptDto;
-import unq.cryptoexchange.dto.request.PersonRegistrationDto;
-import unq.cryptoexchange.dto.response.UserOperations;
 import unq.cryptoexchange.exceptions.InvalidException;
 import unq.cryptoexchange.models.CryptoCurrency;
 import unq.cryptoexchange.models.ExchangeAttempt;
@@ -32,7 +29,6 @@ import unq.cryptoexchange.models.enums.OperationType;
 import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.PersonServiceInterface;
-import unq.cryptoexchange.services.impl.CryptoHoldingService;
 import unq.cryptoexchange.services.impl.CryptoPriceService;
 import unq.cryptoexchange.services.impl.ExchangeAttemptService;
 
@@ -47,9 +43,6 @@ class ExchangeAttemptServiceTest {
 
     @Mock
     private CryptoPriceService cryptoPriceService;
-
-    @Mock
-    private CryptoHoldingService cryptoHoldingService;
 
     @Mock
     private ExchangeAttemptRepository exAttemptRepository;
@@ -117,7 +110,6 @@ class ExchangeAttemptServiceTest {
     @Test
     void test_01_SuccesfullySaveExAttempt(){
         when(personRepository.findById(personTest.getId())).thenReturn(Optional.of(personTest));
-        when(cryptoHoldingService.personHaveThisCant(personTest.getId(), CryptoSymbol.BNBUSDT, exAttemptTestA.getQuantity())).thenReturn(true);
 
         ExchangeAttempt expectedAttempt = new ExchangeAttempt();
 
@@ -139,8 +131,7 @@ class ExchangeAttemptServiceTest {
     void test_02_SaveExchangeAttempt_PriceOutOfRange() {
         
         when(personRepository.findById(personTest.getId())).thenReturn(Optional.of(personTest));
-        when(cryptoHoldingService.personHaveThisCant(personTest.getId(), CryptoSymbol.BNBUSDT, exAttemptTestA.getQuantity())).thenReturn(true);
-        
+
         CryptoCurrency mockCrypto = new CryptoCurrency("BNBUSDT", 100.0f,null);
         when(cryptoPriceService.getPrice("BNBUSDT")).thenReturn(mockCrypto);
 

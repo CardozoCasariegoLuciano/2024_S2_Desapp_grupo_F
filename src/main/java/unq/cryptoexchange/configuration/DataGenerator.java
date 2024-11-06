@@ -4,17 +4,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import unq.cryptoexchange.models.CryptoHolding;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
-import unq.cryptoexchange.repository.CryptoHoldingRepository;
 import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -25,12 +22,10 @@ public class DataGenerator {
     Logger logger = Logger.getLogger(getClass().getName());
 
     @Bean
-    CommandLineRunner initDatabase(PersonRepository personRepository, ExchangeAttemptRepository exchangeAttemptRepository, CryptoHoldingRepository cryptoHoldingRepository) {
+    CommandLineRunner initDatabase(PersonRepository personRepository, ExchangeAttemptRepository exchangeAttemptRepository) {
         return args -> {
             generatePersons().forEach(personRepository::save);
             generateExchangeAttempts().forEach(exchangeAttemptRepository::save);
-            generateCryptoHoldings().forEach(cryptoHoldingRepository::save);
-
             logger.info("Datos iniciales insertados en la base de datos.");
         };
     }
@@ -179,58 +174,6 @@ public class DataGenerator {
                         .operationType(OperationType.BUY)
                         .requestingUserID(1L)
                         .lastUpdate(LocalDateTime.of(2024,10, 25, 10,30,10))
-                        .build()
-        );
-    }
-
-    public static List<CryptoHolding> generateCryptoHoldings() {
-        return Arrays.asList(
-                CryptoHolding.builder()
-                        .personId(1L)
-                        .cryptoSymbol(CryptoSymbol.AAVEUSDT)
-                        .quantity(100000)
-                        .build(),
-
-                CryptoHolding.builder()
-                        .personId(1L)
-                        .cryptoSymbol(CryptoSymbol.BNBUSDT)
-                        .quantity(500)
-                        .build(),
-
-                CryptoHolding.builder()
-                        .personId(2L)
-                        .cryptoSymbol(CryptoSymbol.AAVEUSDT)
-                        .quantity(15000)
-                        .build(),
-
-                CryptoHolding.builder()
-                        .personId(3L)
-                        .cryptoSymbol(CryptoSymbol.BTCUSDT)
-                        .quantity(10)
-                        .build(),
-
-                CryptoHolding.builder()
-                        .personId(3L)
-                        .cryptoSymbol(CryptoSymbol.AAVEUSDT)
-                        .quantity(1000)
-                        .build(),
-
-                CryptoHolding.builder()
-                        .personId(4L)
-                        .cryptoSymbol(CryptoSymbol.AAVEUSDT)
-                        .quantity(100)
-                        .build(),
-
-                CryptoHolding.builder()
-                        .personId(5L)
-                        .cryptoSymbol(CryptoSymbol.ETHUSDT)
-                        .quantity(3)
-                        .build(),
-
-                CryptoHolding.builder()
-                        .personId(5L)
-                        .cryptoSymbol(CryptoSymbol.AAVEUSDT)
-                        .quantity(15)
                         .build()
         );
     }
