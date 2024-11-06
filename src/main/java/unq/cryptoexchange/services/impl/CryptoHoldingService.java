@@ -1,6 +1,7 @@
 package unq.cryptoexchange.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import unq.cryptoexchange.models.CryptoHolding;
 import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.repository.CryptoHoldingRepository;
 import unq.cryptoexchange.repository.PersonRepository;
@@ -28,5 +29,5 @@ public class CryptoHoldingService implements CryptoHoldingServiceInterface {
     public void cleanAll() {
         personRepository.deleteAll();
     }
-    
+
 }

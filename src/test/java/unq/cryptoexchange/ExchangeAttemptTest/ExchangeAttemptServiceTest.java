@@ -206,20 +206,4 @@ class ExchangeAttemptServiceTest {
         verify(exAttemptRepository, times(2)).countStatusCloseByPersonId(personTest.getId());
         verify(exAttemptRepository, times(2)).countExchangeAttempByPersonId(personTest.getId());
     }
-
-    @Test
-    void test_05_SaveExchangeAttempt_WhithOutCryptoCurrency() {
-        
-        when(personRepository.findById(personTest.getId())).thenReturn(Optional.of(personTest));
-        when(cryptoHoldingService.personHaveThisCant(personTest.getId(), CryptoSymbol.BNBUSDT, exAttemptTestA.getQuantity())).thenReturn(false);
-        
-        CryptoCurrency mockCrypto = new CryptoCurrency("BNBUSDT", 100.0f,null);
-        when(cryptoPriceService.getPrice("BNBUSDT")).thenReturn(mockCrypto);
-
-        InvalidException exception = assertThrows(InvalidException.class, () -> {
-            exchangeAttemptService.saveExchangeAttempt(exAttemptTestA);
-        });
-
-        assertEquals("This person with Id: null does not have this amount of this crypto available", exception.getMessage());
-    }
 }

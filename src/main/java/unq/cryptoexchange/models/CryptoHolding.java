@@ -30,6 +30,11 @@ public class CryptoHolding {
     private Long personId;
 
     @Min(0)
-    private int quantity; 
+    private int quantity;
 
+    public CryptoHolding(CryptoSymbol cryptoSymbol, Long personId, int quantity) {
+        this.cryptoSymbol = cryptoSymbol;
+        this.personId = personId;
+        this.quantity = quantity;
+    }
 }

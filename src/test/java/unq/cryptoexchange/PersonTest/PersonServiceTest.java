@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.*;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
@@ -21,7 +22,10 @@ import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
 import unq.cryptoexchange.services.CryptoPriceServiceInterface;
 import unq.cryptoexchange.services.PersonServiceInterface;
+import unq.cryptoexchange.services.impl.CryptoHoldingService;
 import unq.cryptoexchange.services.impl.ExchangeAttemptService;
+
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest

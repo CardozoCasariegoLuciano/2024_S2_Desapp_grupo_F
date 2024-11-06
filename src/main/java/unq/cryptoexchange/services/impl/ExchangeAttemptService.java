@@ -57,10 +57,6 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
             throw new NullPointerException("This PersonId: " + exAttemptDto.getPersonId() + " does not exist");
         }
 
-//        if(!cryptoHoldingService.personHaveThisCant(exAttemptDto.getPersonId(), exAttemptDto.getCrypto(), exAttemptDto.getQuantity())){
-//            throw new InvalidException("This person with Id: " + exAttemptDto.getPersonId() + " does not have this amount of this crypto available");
-//        }
-
         Person person = existPerson.get();
 
         CryptoCurrency priceCrypto = cryptoPriceService.getPrice(exAttemptDto.getCrypto().toString());
