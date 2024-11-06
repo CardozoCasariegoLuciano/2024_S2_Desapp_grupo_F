@@ -18,10 +18,10 @@ public class UserOperations {
     private Double argTotal;
     private List<UserSingleOperationDto> operations;
 
-    public UserOperations(double us_total, double argTotal, List<UserSingleOperationDto> operations){
+    public UserOperations(double usTotal, double argTotal, List<UserSingleOperationDto> operations){
         this.requestTime = LocalDateTime.now();
         this.operations = operations;
-        this.usTotal = us_total;
+        this.usTotal = usTotal;
         this.argTotal = argTotal;
     }
 }

@@ -102,7 +102,7 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         Optional<Person> person = this.personRepository.findById(userID);
 
         if(attemp.isEmpty() || person.isEmpty()){
-            throw new NotFoundExceptions("No se encontro el usuario o el exchange");
+            throw new NotFoundExceptions("No se encontro el usuario o el exchange para poder aceptar");
         }
 
         ExchangeAttempt exchange = attemp.get();
@@ -123,13 +123,13 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         Optional<Person> person = this.personRepository.findById(userID);
 
         if(attemp.isEmpty() || person.isEmpty()){
-            throw new NotFoundExceptions("No se encontro el usuario o el exchange");
+            throw new NotFoundExceptions("No se encontro el usuario o el exchange para poder confirmar");
         }
 
         ExchangeAttempt exchange = attemp.get();
 
         if(exchange.getRequestingUserID() == null || exchange.getStatus() != AttemptStatus.PENDING ){
-            throw new InvalidException("Peticion invalida");
+            throw new InvalidException("La peticion no esta pendiente a ser confirmada");
         }
 
         if(!Objects.equals(exchange.getPersonId(), userID)){
@@ -155,14 +155,14 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         Optional<Person> person = this.personRepository.findById(userID);
 
         if(attemp.isEmpty() || person.isEmpty()){
-            throw new NotFoundExceptions("No se encontro el usuario o el exchange");
+            throw new NotFoundExceptions("No se encontro el usuario o el exchange para poder cancelar");
         }
 
         ExchangeAttempt exchange = attemp.get();
         Person requesting = person.get();
 
         if(exchange.getStatus() == AttemptStatus.CANCELLED || exchange.getStatus() == AttemptStatus.CLOSE ){
-            throw new InvalidException("Peticion invalida");
+            throw new InvalidException("La peticion ya esta cancelada o cerrada");
         }
 
         if(!(Objects.equals(exchange.getRequestingUserID(), userID) || Objects.equals(exchange.getPersonId(), userID))){

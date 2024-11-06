@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class ExchangeAttempsStatusTests {
+class ExchangeAttempsStatusTests {
     @Autowired
     PersonServiceInterface personService;
 
@@ -87,8 +87,8 @@ public class ExchangeAttempsStatusTests {
 
         ExchangeAttempt recoverExchange = exchangeAttemptService.findExchangeAttemp(savesExchange.getAttemptId());
 
-        Assertions.assertEquals(recoverExchange.getStatus(), AttemptStatus.PENDING);
-        Assertions.assertEquals(recoverExchange.getRequestingUserID(), requested.getId());
+        Assertions.assertEquals(AttemptStatus.PENDING, recoverExchange.getStatus());
+        Assertions.assertEquals(requested.getId(), recoverExchange.getRequestingUserID());
         Assertions.assertNotNull(recoverExchange.getLastUpdate());
     }
 
@@ -138,9 +138,9 @@ public class ExchangeAttempsStatusTests {
         Person recoverRequested = personService.findPerson(requested.getId());
 
 
-        Assertions.assertEquals(recoverExchange.getStatus(), AttemptStatus.CLOSE);
-        Assertions.assertEquals(recoverCreator.getPoints(), 110);
-        Assertions.assertEquals(recoverRequested.getPoints(), 110);
+        Assertions.assertEquals(AttemptStatus.CLOSE,recoverExchange.getStatus());
+        Assertions.assertEquals(110, recoverCreator.getPoints());
+        Assertions.assertEquals(110, recoverRequested.getPoints());
     }
 
     @Test
@@ -181,7 +181,7 @@ public class ExchangeAttempsStatusTests {
         Exception exception = Assertions.assertThrows(InvalidException.class, () -> {
             exchangeAttemptService.confirmAttemp(savesExchange.getAttemptId(), requested.getId());
         });
-        Assertions.assertTrue(exception.getMessage().contains("Peticion invalida"));
+        Assertions.assertTrue(exception.getMessage().contains("La peticion no esta pendiente a ser confirmada"));
     }
 
     @Test
@@ -198,9 +198,9 @@ public class ExchangeAttempsStatusTests {
         Person recoverCreator = personService.findPerson(creator.getId());
         Person recoverRequested = personService.findPerson(requested.getId());
 
-        Assertions.assertEquals(recoverExchange.getStatus(), AttemptStatus.CANCELLED);
-        Assertions.assertEquals(recoverCreator.getPoints(), 80);
-        Assertions.assertEquals(recoverRequested.getPoints(), 100);
+        Assertions.assertEquals(AttemptStatus.CANCELLED, recoverExchange.getStatus());
+        Assertions.assertEquals(80, recoverCreator.getPoints());
+        Assertions.assertEquals(100, recoverRequested.getPoints());
     }
 
     @Test
@@ -230,7 +230,7 @@ public class ExchangeAttempsStatusTests {
         Exception exception = Assertions.assertThrows(InvalidException.class, () -> {
             exchangeAttemptService.cancelAttemp(savesExchange.getAttemptId(), creator.getId());
         });
-        Assertions.assertTrue(exception.getMessage().contains("Peticion invalida"));
+        Assertions.assertTrue(exception.getMessage().contains("La peticion ya esta cancelada o cerrada"));
     }
 
     @Test
@@ -243,8 +243,8 @@ public class ExchangeAttempsStatusTests {
         ExchangeAttempt recoverExchange = exchangeAttemptService.findExchangeAttemp(savesExchange.getAttemptId());
         Person recoverCreator = personService.findPerson(creator.getId());
 
-        Assertions.assertEquals(recoverExchange.getStatus(), AttemptStatus.CANCELLED);
-        Assertions.assertEquals(recoverCreator.getPoints(), 100);
+        Assertions.assertEquals(AttemptStatus.CANCELLED,recoverExchange.getStatus());
+        Assertions.assertEquals(100,recoverCreator.getPoints());
     }
 
     @Test

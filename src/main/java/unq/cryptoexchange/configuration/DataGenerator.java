@@ -148,8 +148,8 @@ public class DataGenerator {
 
                 ExchangeAttempt.builder()
                         .personId(5L)
-                        .nameUser("Charlie")
-                        .lastNameUser("Brown")
+                        .nameUser("Charlie__")
+                        .lastNameUser("Brown__")
                         .crypto(CryptoSymbol.AAVEUSDT)
                         .cryptoQuantity(3)
                         .price(300.00f)
@@ -163,8 +163,8 @@ public class DataGenerator {
 
                 ExchangeAttempt.builder()
                         .personId(5L)
-                        .nameUser("Charlie")
-                        .lastNameUser("Brown")
+                        .nameUser("Charlie_")
+                        .lastNameUser("Brown_")
                         .crypto(CryptoSymbol.AAVEUSDT)
                         .cryptoQuantity(3)
                         .price(300.00f)
