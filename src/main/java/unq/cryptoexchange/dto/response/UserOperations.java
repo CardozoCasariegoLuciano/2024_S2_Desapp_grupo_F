@@ -14,15 +14,15 @@ import java.util.List;
 @Builder
 public class UserOperations {
     private LocalDateTime requestTime;
-    private double usTotal;
-    private double argTotal;
+    private Double usTotal;
+    private Double argTotal;
     private List<UserSingleOperationDto> operations;
 
-    public UserOperations(double us_total, double arg_total, List<UserSingleOperationDto> operations){
+    public UserOperations(double us_total, double argTotal, List<UserSingleOperationDto> operations){
         this.requestTime = LocalDateTime.now();
         this.operations = operations;
         this.usTotal = us_total;
-        this.argTotal = arg_total;
+        this.argTotal = argTotal;
     }
 }
 

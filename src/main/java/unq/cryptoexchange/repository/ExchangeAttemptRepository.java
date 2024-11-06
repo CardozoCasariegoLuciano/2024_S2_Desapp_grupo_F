@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import unq.cryptoexchange.models.ExchangeAttempt;
@@ -24,5 +24,5 @@ public interface ExchangeAttemptRepository extends JpaRepository<ExchangeAttempt
     @Query("SELECT e FROM ExchangeAttempt e " +
             "WHERE (e.personId = :id OR e.requestingUserID = :id) " +
             "AND e.status IN ('CLOSE') AND e.lastUpdate BETWEEN :startDate AND :endDate")
-    public List<ExchangeAttempt> findExchangesRelatedWidthUser(@Param("id") Long id, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    public List<ExchangeAttempt> findExchangesRelatedWidthUser(@Param("id") Long id, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

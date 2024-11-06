@@ -1,6 +1,7 @@
 package unq.cryptoexchange.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
@@ -12,14 +13,12 @@ import unq.cryptoexchange.exceptions.NotFoundExceptions;
 import unq.cryptoexchange.models.CryptoCurrency;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
-import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.repository.ExchangeAttemptRepository;
 import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.CryptoPriceServiceInterface;
 import unq.cryptoexchange.services.PersonServiceInterface;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +63,6 @@ public class PersonService implements PersonServiceInterface {
         personRepository.deleteAll();
     }
 
-    //TODO Agregarle los tests a esto
     @Override
     public UserOperations getUserOperations(Long personID, String initDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -88,7 +86,7 @@ public class PersonService implements PersonServiceInterface {
             throw new InvalidException("las fechas no cumplen el formato dd/MM/yyyy");
         }
 
-        List<ExchangeAttempt> list = this.exchangeAttemptRepository.findExchangesRelatedWidthUser(personID, parceInitDate, parceEndDate);
+        List<ExchangeAttempt> list = this.exchangeAttemptRepository.findExchangesRelatedWidthUser(personID, parceInitDate.atStartOfDay(), parceEndDate.atStartOfDay());
 
         double[] totals = {0, 0}; //[0] == us_total || [1] == arg_total
         List<UserSingleOperationDto> operations = new java.util.ArrayList<>(List.of());

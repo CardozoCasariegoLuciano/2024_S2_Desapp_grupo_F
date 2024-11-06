@@ -40,6 +40,16 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
     }
 
     @Override
+    public ExchangeAttempt findExchangeAttemp(Long id) {
+        Optional<ExchangeAttempt> attemp=  this.exAttemptRepository.findById(id);
+        if(attemp.isPresent()){
+            return attemp.get();
+        }else{
+            return null;
+        }
+    }
+
+    @Override
     public ExchangeAttempt saveExchangeAttempt(ExchangeAttemptDto exAttemptDto) {
 
         Optional<Person> existPerson = personRepository.findById(exAttemptDto.getPersonId());
@@ -47,9 +57,9 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
             throw new NullPointerException("This PersonId: " + exAttemptDto.getPersonId() + " does not exist");
         }
 
-        if(!cryptoHoldingService.personHaveThisCant(exAttemptDto.getPersonId(), exAttemptDto.getCrypto(), exAttemptDto.getQuantity())){
-            throw new InvalidException("This person with Id: " + exAttemptDto.getPersonId() + " does not have this amount of this crypto available");
-        }
+//        if(!cryptoHoldingService.personHaveThisCant(exAttemptDto.getPersonId(), exAttemptDto.getCrypto(), exAttemptDto.getQuantity())){
+//            throw new InvalidException("This person with Id: " + exAttemptDto.getPersonId() + " does not have this amount of this crypto available");
+//        }
 
         Person person = existPerson.get();
 
@@ -115,7 +125,6 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         if(Objects.equals(exchange.getPersonId(), userID) || exchange.getStatus() != AttemptStatus.OPEN ){
             throw new InvalidException("Peticion invalida");
         }
-        //TODO validar con el profe
 
         exchange.setRequestingUserID(userID);
         exchange.setLastUpdate(LocalDateTime.now());
@@ -143,7 +152,7 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
             throw new InvalidException("No puedes confirmar esta exchange si no eres el creador");
         }
 
-        if(this.isPriceInRange(exchange)){
+        if(!this.isPriceInRange(exchange)){
             exchange.setLastUpdate(LocalDateTime.now());
             exchange.setStatus(AttemptStatus.CANCELLED);
             throw new ExchangeOutOfRange("El valor del cripto activo se alejo mucho del valor esperado");
