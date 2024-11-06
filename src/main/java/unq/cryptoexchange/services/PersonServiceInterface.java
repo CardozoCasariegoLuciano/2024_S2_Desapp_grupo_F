@@ -5,7 +5,7 @@ import unq.cryptoexchange.dto.response.UserOperations;
 import unq.cryptoexchange.models.Person;
 
 public interface PersonServiceInterface {
-
+    Person findPerson(Long id);
     Person savePerson(PersonRegistrationDto personDto);
     void cleanAll();
 

@@ -71,7 +71,7 @@ public class Person {
     }
 
     public void increasePoints(int amount){
-        this.points = Math.min( 100, this.points+amount);
+        this.points = Math.min( 300, this.points+amount);
     }
 
     public String getReputation(int cantOp){

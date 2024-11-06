@@ -96,7 +96,6 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         exAttemptRepository.deleteAll();
     }
 
-    //TODO testear
     @Override
     public void acceptAttemp(Long attempID, Long userID) {
         Optional<ExchangeAttempt> attemp = this.exAttemptRepository.findById(attempID);
@@ -118,7 +117,6 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         this.exAttemptRepository.save(exchange);
     }
 
-    //TODO testear
     @Override
     public void confirmAttemp(Long attempID, Long userID) {
         Optional<ExchangeAttempt> attemp = this.exAttemptRepository.findById(attempID);
@@ -144,14 +142,13 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
             throw new ExchangeOutOfRange("El valor del cripto activo se alejo mucho del valor esperado");
         }
 
-        this.increaseReputation(exchange.getPersonId(), userID, exchange);
+        this.increaseReputation(exchange.getPersonId(), exchange.getRequestingUserID(), exchange);
 
         exchange.setLastUpdate(LocalDateTime.now());
         exchange.setStatus(AttemptStatus.CLOSE);
         this.exAttemptRepository.save(exchange);
     }
 
-    //TODO testear
     @Override
     public void cancelAttemp(Long attempID, Long userID) {
         Optional<ExchangeAttempt> attemp = this.exAttemptRepository.findById(attempID);
@@ -164,12 +161,11 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         ExchangeAttempt exchange = attemp.get();
         Person requesting = person.get();
 
-
         if(exchange.getStatus() == AttemptStatus.CANCELLED || exchange.getStatus() == AttemptStatus.CLOSE ){
             throw new InvalidException("Peticion invalida");
         }
 
-        if(Objects.equals(exchange.getRequestingUserID(), userID) || Objects.equals(exchange.getPersonId(), userID)){
+        if(!(Objects.equals(exchange.getRequestingUserID(), userID) || Objects.equals(exchange.getPersonId(), userID))){
             throw new InvalidException("El usuario ingresado no pertenese al exchange");
         }
 
@@ -180,6 +176,7 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
         }
 
         exchange.setStatus(AttemptStatus.CANCELLED);
+        this.personRepository.save(requesting);
         this.exAttemptRepository.save(exchange);
     }
 
@@ -198,5 +195,8 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
             owner.increasePoints(10);
             requesting.increasePoints(10);
         }
+
+        this.personRepository.save(owner);
+        this.personRepository.save(requesting);
     }
 }

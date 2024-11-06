@@ -373,6 +373,7 @@ class PersonServiceTest {
     @AfterEach
     void clearAll() {
         this.personService.cleanAll();
+        this.exchangeAttemptService.cleanAll();
     }
 
     public static boolean AreTheSameNumber(Double num1, Double num2) {

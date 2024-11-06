@@ -212,24 +212,4 @@ class ExchangeAttemptServiceTest {
         verify(exAttemptRepository, times(2)).countStatusCloseByPersonId(personTest.getId());
         verify(exAttemptRepository, times(2)).countExchangeAttempByPersonId(personTest.getId());
     }
-
-    @Test
-    void test_5_AcceptExchangeAtterm_invalid_ids(){
-
-    }
-
-    @Test
-    void test_6_AcceptExchangeAtterm_aceptedBYOwner(){
-
-    }
-
-    @Test
-    void test_7_AcceptExchangeAtterm_aceptedANotOpenExchange(){
-
-    }
-
-    @Test
-    void test_8_AcceptExchangeAtterm_OK(){
-
-    }
 }

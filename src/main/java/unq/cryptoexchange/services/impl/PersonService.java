@@ -37,6 +37,16 @@ public class PersonService implements PersonServiceInterface {
     }
 
     @Override
+    public Person findPerson(Long id) {
+        Optional<Person> person = this.personRepository.findById(id);
+        if( person.isPresent()){
+            return person.get();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public Person savePerson(PersonRegistrationDto personDto) {
 
         Optional<Person> existPerson = this.personRepository.findByEmail(personDto.getEmail());
