@@ -1,14 +1,10 @@
 package unq.cryptoexchange.PersonTest;
 
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
 import unq.cryptoexchange.dto.response.UserOperations;
@@ -20,23 +16,27 @@ import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
-import unq.cryptoexchange.services.CryptoPriceServiceInterface;
 import unq.cryptoexchange.services.PersonServiceInterface;
-import unq.cryptoexchange.services.impl.CryptoHoldingService;
+import unq.cryptoexchange.services.impl.CryptoPriceService;
 import unq.cryptoexchange.services.impl.ExchangeAttemptService;
 
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
 class PersonServiceTest {
-
     @Autowired
     PersonServiceInterface personService;
+
+    @MockBean
+    CryptoPriceService cryptoPriceService;
+
     @Autowired
     ExchangeAttemptService exchangeAttemptService;
-    @Autowired
-    CryptoPriceServiceInterface cryptoPriceService;
+
 
     @Test
     void test_01_SuccessfullySaveAPerson() {
@@ -319,53 +319,56 @@ class PersonServiceTest {
         Assertions.assertNotNull(resp.getRequestTime());
     }
 
-    //Este test pasa bien, pero al correr la pipeline de githubActions no le gusta la peticion de binance y rompe
-//    @Test
-//    void test_15_getOperations_OK_withData(){
-//        PersonRegistrationDto creatorDto = PersonRegistrationDto.builder()
-//                .name("Test")
-//                .lastname("LastTest")
-//                .email("test.test@example.com")
-//                .address("Test 123")
-//                .password("unaPassword123!")
-//                .cvu("2231456789954442334123")
-//                .wallet("123456789")
-//                .build();
-//        Person creator = personService.savePerson(creatorDto);
-//
-//        PersonRegistrationDto requestedDtp = PersonRegistrationDto.builder()
-//                .name("Test")
-//                .lastname("LastTest")
-//                .email("test.es2@example.com")
-//                .address("Test 123")
-//                .password("unaPassword123!")
-//                .cvu("2231456789954442334123")
-//                .wallet("123456789")
-//                .build();
-//        Person requested = personService.savePerson(requestedDtp);
-//
-//        Float currentPrice = cryptoPriceService.getPrice(CryptoSymbol.BTCUSDT.name()).getPrice();
-//        ExchangeAttemptDto exchange = ExchangeAttemptDto.builder()
-//                .personId(creator.getId())
-//                .name("Test")
-//                .lastName("LastTest")
-//                .crypto(CryptoSymbol.BTCUSDT)
-//                .quantity(2000)
-//                .price(currentPrice)
-//                .operationType(OperationType.BUY)
-//                .build();
-//
-//        ExchangeAttempt savesExchange = exchangeAttemptService.saveExchangeAttempt(exchange);
-//
-//        exchangeAttemptService.acceptAttemp(savesExchange.getAttemptId(), requested.getId());
-//        exchangeAttemptService.confirmAttemp(savesExchange.getAttemptId(), creator.getId());
-//
-//        UserOperations resp = this.personService.getUserOperations(requested.getId(), "17/10/2020", "17/10/2030");
-//
-//        Assertions.assertEquals(resp.getOperations().size(), 1);
-//        Assertions.assertTrue(this.AreTheSameNumber(resp.getUsTotal(), savesExchange.getPrice().doubleValue()));
-//        Assertions.assertEquals(resp.getArgTotal(), savesExchange.getAmountArg().doubleValue());
-//    }
+    @Test
+    void test_15_getOperations_OK_withData(){
+        PersonRegistrationDto creatorDto = PersonRegistrationDto.builder()
+                .name("Test")
+                .lastname("LastTest")
+                .email("test.test@example.com")
+                .address("Test 123")
+                .password("unaPassword123!")
+                .cvu("2231456789954442334123")
+                .wallet("123456789")
+                .build();
+        Person creator = personService.savePerson(creatorDto);
+
+        PersonRegistrationDto requestedDtp = PersonRegistrationDto.builder()
+                .name("Test")
+                .lastname("LastTest")
+                .email("test.es2@example.com")
+                .address("Test 123")
+                .password("unaPassword123!")
+                .cvu("2231456789954442334123")
+                .wallet("123456789")
+                .build();
+        Person requested = personService.savePerson(requestedDtp);
+
+        when(this.cryptoPriceService.getPrice(anyString())).thenReturn(new CryptoCurrency(CryptoSymbol.BTCUSDT.name(), 2000f, ""));
+        when(this.cryptoPriceService.isPriceInRange(any(ExchangeAttemptDto.class))).thenReturn(true);
+        when(this.cryptoPriceService.isPriceInRange(any(ExchangeAttempt.class))).thenReturn(true);
+
+        Float current = this.cryptoPriceService.getPrice(CryptoSymbol.BTCUSDT.name()).getPrice();
+        ExchangeAttemptDto exchange = ExchangeAttemptDto.builder()
+                .personId(creator.getId())
+                .name("Test")
+                .lastName("LastTest")
+                .crypto(CryptoSymbol.BTCUSDT)
+                .quantity(20)
+                .price(current)
+                .operationType(OperationType.BUY)
+                .build();
+
+        ExchangeAttempt savesExchange = exchangeAttemptService.saveExchangeAttempt(exchange);
+
+        exchangeAttemptService.acceptAttemp(savesExchange.getAttemptId(), requested.getId());
+        exchangeAttemptService.confirmAttemp(savesExchange.getAttemptId(), creator.getId());
+
+        UserOperations resp = this.personService.getUserOperations(requested.getId(), "17/10/2020", "17/10/2030");
+
+        Assertions.assertEquals(resp.getOperations().size(), 1);
+        Assertions.assertTrue(this.AreTheSameNumber(resp.getUsTotal(), savesExchange.getPrice().doubleValue()));
+        Assertions.assertEquals(resp.getArgTotal(), savesExchange.getAmountArg().doubleValue());
+    }
 
     @AfterEach
     void clearAll() {

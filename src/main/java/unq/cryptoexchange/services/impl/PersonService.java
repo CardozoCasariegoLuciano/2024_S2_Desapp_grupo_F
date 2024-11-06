@@ -1,7 +1,6 @@
 package unq.cryptoexchange.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;

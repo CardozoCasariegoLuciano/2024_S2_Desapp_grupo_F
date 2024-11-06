@@ -7,7 +7,6 @@ import unq.cryptoexchange.dto.request.ItemExAttemptDto;
 import unq.cryptoexchange.exceptions.ExchangeOutOfRange;
 import unq.cryptoexchange.exceptions.InvalidException;
 import unq.cryptoexchange.exceptions.NotFoundExceptions;
-import unq.cryptoexchange.models.CryptoCurrency;
 import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
 import unq.cryptoexchange.models.enums.AttemptStatus;
@@ -16,7 +15,6 @@ import unq.cryptoexchange.repository.PersonRepository;
 import unq.cryptoexchange.services.ExchangeAttemptServiceInterface;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -28,15 +26,13 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
     private final ExchangeAttemptRepository exAttemptRepository;
     private final PersonRepository personRepository;
     private final CryptoPriceService cryptoPriceService;
-    private final CryptoHoldingService cryptoHoldingService;
 
     @Autowired
     public ExchangeAttemptService(PersonRepository personRepository, ExchangeAttemptRepository exAttemptRepository,
-            CryptoPriceService cryptoPriceService, CryptoHoldingService cryptoHoldingService) {
+            CryptoPriceService cryptoPriceService) {
         this.personRepository = personRepository;
         this.exAttemptRepository = exAttemptRepository;
         this.cryptoPriceService = cryptoPriceService;
-        this.cryptoHoldingService = cryptoHoldingService;
     }
 
     @Override
@@ -51,18 +47,14 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
 
     @Override
     public ExchangeAttempt saveExchangeAttempt(ExchangeAttemptDto exAttemptDto) {
-
-        Optional<Person> existPerson = personRepository.findById(exAttemptDto.getPersonId());
+        Optional<Person> existPerson = this.personRepository.findById(exAttemptDto.getPersonId());
         if (existPerson.isEmpty()) {
             throw new NullPointerException("This PersonId: " + exAttemptDto.getPersonId() + " does not exist");
         }
 
         Person person = existPerson.get();
 
-        CryptoCurrency priceCrypto = cryptoPriceService.getPrice(exAttemptDto.getCrypto().toString());
-        boolean priceInMargin = priceCrypto.priceInMargin(exAttemptDto.getPrice());
-        
-        if (!priceInMargin) {
+        if (!this.cryptoPriceService.isPriceInRange(exAttemptDto)) {
             throw new InvalidException("This price: " + exAttemptDto.getPrice() + " is out of range ");
         }
 
@@ -73,12 +65,10 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
                 exAttemptDto.getOperationType());
 
         return exAttemptRepository.save(exAttempt);
-
     }
 
     @Override
     public List<ItemExAttemptDto> getAllExchangeAttempt() {
-
         List<ExchangeAttempt> exAttempt = exAttemptRepository.findByStatus(AttemptStatus.OPEN);
 
         return exAttempt.stream().map(attempt -> {
@@ -148,7 +138,7 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
             throw new InvalidException("No puedes confirmar esta exchange si no eres el creador");
         }
 
-        if(!this.isPriceInRange(exchange)){
+        if(!this.cryptoPriceService.isPriceInRange(exchange)){
             exchange.setLastUpdate(LocalDateTime.now());
             exchange.setStatus(AttemptStatus.CANCELLED);
             throw new ExchangeOutOfRange("El valor del cripto activo se alejo mucho del valor esperado");
@@ -208,12 +198,5 @@ public class ExchangeAttemptService implements ExchangeAttemptServiceInterface {
             owner.increasePoints(10);
             requesting.increasePoints(10);
         }
-    }
-
-    private boolean isPriceInRange(ExchangeAttempt attemp){
-        CryptoCurrency currentCryptoPrice = cryptoPriceService.getPrice(attemp.getCrypto().name());
-        Float exchangeValue = attemp.getPrice();
-
-        return currentCryptoPrice.priceInMargin(exchangeValue);
     }
 }

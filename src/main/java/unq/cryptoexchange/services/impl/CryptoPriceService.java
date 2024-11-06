@@ -2,7 +2,9 @@ package unq.cryptoexchange.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
 import unq.cryptoexchange.models.CryptoCurrency;
+import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.services.CryptoPriceServiceInterface;
 
 import java.time.LocalDateTime;
@@ -32,5 +34,19 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
         }
 
         return cryptoPrices;
+    }
+
+    public boolean isPriceInRange(ExchangeAttempt attemp){
+        CryptoCurrency currentCryptoPrice = this.getPrice(attemp.getCrypto().name());
+        Float exchangeValue = attemp.getPrice();
+
+        return currentCryptoPrice.priceInMargin(exchangeValue);
+    }
+
+    public boolean isPriceInRange(ExchangeAttemptDto attemp){
+        CryptoCurrency currentCryptoPrice = this.getPrice(attemp.getCrypto().name());
+        Float exchangeValue = attemp.getPrice();
+
+        return currentCryptoPrice.priceInMargin(exchangeValue);
     }
 }
