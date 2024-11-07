@@ -4,17 +4,39 @@ import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
+import unq.cryptoexchange.dto.response.UserOperations;
 import unq.cryptoexchange.exceptions.DuplicatedException;
+import unq.cryptoexchange.exceptions.InvalidException;
+import unq.cryptoexchange.exceptions.NotFoundExceptions;
+import unq.cryptoexchange.models.CryptoCurrency;
+import unq.cryptoexchange.models.ExchangeAttempt;
 import unq.cryptoexchange.models.Person;
+import unq.cryptoexchange.models.enums.CryptoSymbol;
+import unq.cryptoexchange.models.enums.OperationType;
 import unq.cryptoexchange.services.PersonServiceInterface;
+import unq.cryptoexchange.services.impl.CryptoPriceService;
+import unq.cryptoexchange.services.impl.ExchangeAttemptService;
+
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
 class PersonServiceTest {
-
     @Autowired
     PersonServiceInterface personService;
+
+    @MockBean
+    CryptoPriceService cryptoPriceService;
+
+    @Autowired
+    ExchangeAttemptService exchangeAttemptService;
+
 
     @Test
     void test_01_SuccessfullySaveAPerson() {
@@ -227,8 +249,136 @@ class PersonServiceTest {
         Assertions.assertEquals(100, savedPerson.getPoints());
     }
 
+    @Test
+    void test_12_getOperations_userNotFOund(){
+        Exception exception = Assertions.assertThrows(NotFoundExceptions.class, () -> {
+            this.personService.getUserOperations(2322L, "", "");
+        });
+        Assertions.assertTrue(exception.getMessage().contains("No se encontro a la persona con ID"));
+    }
+
+    @Test
+    void test_13_getOperations_invalidFormatingDate(){
+        PersonRegistrationDto personDto = PersonRegistrationDto.builder()
+                .name("Test")
+                .lastname("LastTest")
+                .email("test.test@example.com")
+                .address("Test 123")
+                .password("unaPassword123!")
+                .cvu("2231456789954442334123")
+                .wallet("123456789")
+                .build();
+
+        Person savedPerson = personService.savePerson(personDto);
+
+        Exception exception = Assertions.assertThrows(InvalidException.class, () -> {
+            this.personService.getUserOperations(savedPerson.getId(), "asdasd", "");
+        });
+        Assertions.assertTrue(exception.getMessage().contains("las fechas no cumplen el formato dd/MM/yyyy"));
+    }
+
+    @Test
+    void test_14_getOperations_invalidDates(){
+        PersonRegistrationDto personDto = PersonRegistrationDto.builder()
+                .name("Test")
+                .lastname("LastTest")
+                .email("test.test@example.com")
+                .address("Test 123")
+                .password("unaPassword123!")
+                .cvu("2231456789954442334123")
+                .wallet("123456789")
+                .build();
+
+        Person savedPerson = personService.savePerson(personDto);
+
+        Exception exception = Assertions.assertThrows(InvalidException.class, () -> {
+            this.personService.getUserOperations(savedPerson.getId(), "17/10/2024", "17/10/1997");
+        });
+        Assertions.assertTrue(exception.getMessage().contains("La fecha de inicio tiene que ser posterior a la fecha final"));
+    }
+
+    @Test
+    void test_15_getOperations_OK_emptyresult(){
+        PersonRegistrationDto personDto = PersonRegistrationDto.builder()
+                .name("Test")
+                .lastname("LastTest")
+                .email("test.test@example.com")
+                .address("Test 123")
+                .password("unaPassword123!")
+                .cvu("2231456789954442334123")
+                .wallet("123456789")
+                .build();
+
+        Person savedPerson = personService.savePerson(personDto);
+
+        UserOperations resp = this.personService.getUserOperations(savedPerson.getId(), "17/10/2017", "17/10/2024");
+
+        Assertions.assertEquals(resp.getOperations().size(), 0);
+        Assertions.assertEquals(resp.getUsTotal(), 0);
+        Assertions.assertEquals(resp.getArgTotal(), 0);
+        Assertions.assertNotNull(resp.getRequestTime());
+    }
+
+    @Test
+    void test_15_getOperations_OK_withData(){
+        PersonRegistrationDto creatorDto = PersonRegistrationDto.builder()
+                .name("Test")
+                .lastname("LastTest")
+                .email("test.test@example.com")
+                .address("Test 123")
+                .password("unaPassword123!")
+                .cvu("2231456789954442334123")
+                .wallet("123456789")
+                .build();
+        Person creator = personService.savePerson(creatorDto);
+
+        PersonRegistrationDto requestedDtp = PersonRegistrationDto.builder()
+                .name("Test")
+                .lastname("LastTest")
+                .email("test.es2@example.com")
+                .address("Test 123")
+                .password("unaPassword123!")
+                .cvu("2231456789954442334123")
+                .wallet("123456789")
+                .build();
+        Person requested = personService.savePerson(requestedDtp);
+
+        when(this.cryptoPriceService.getPrice(anyString())).thenReturn(new CryptoCurrency(CryptoSymbol.BTCUSDT.name(), 2000f, ""));
+        when(this.cryptoPriceService.isPriceInRange(any(ExchangeAttemptDto.class))).thenReturn(true);
+        when(this.cryptoPriceService.isPriceInRange(any(ExchangeAttempt.class))).thenReturn(true);
+
+        Float current = this.cryptoPriceService.getPrice(CryptoSymbol.BTCUSDT.name()).getPrice();
+        ExchangeAttemptDto exchange = ExchangeAttemptDto.builder()
+                .personId(creator.getId())
+                .name("Test")
+                .lastName("LastTest")
+                .crypto(CryptoSymbol.BTCUSDT)
+                .quantity(20)
+                .price(current)
+                .operationType(OperationType.BUY)
+                .build();
+
+        ExchangeAttempt savesExchange = exchangeAttemptService.saveExchangeAttempt(exchange);
+
+        exchangeAttemptService.acceptAttemp(savesExchange.getAttemptId(), requested.getId());
+        exchangeAttemptService.confirmAttemp(savesExchange.getAttemptId(), creator.getId());
+
+        UserOperations resp = this.personService.getUserOperations(requested.getId(), "17/10/2020", "17/10/2030");
+
+        Assertions.assertEquals(resp.getOperations().size(), 1);
+        Assertions.assertTrue(this.AreTheSameNumber(resp.getUsTotal(), savesExchange.getPrice().doubleValue()));
+        Assertions.assertEquals(resp.getArgTotal(), savesExchange.getAmountArg().doubleValue());
+    }
+
     @AfterEach
     void clearAll() {
         this.personService.cleanAll();
+        this.exchangeAttemptService.cleanAll();
+    }
+
+    public static boolean AreTheSameNumber(Double num1, Double num2) {
+        double difference = Math.abs(num1 - num2);
+        double threshold = num1 * 0.01;
+        return difference <= threshold;
     }
 }

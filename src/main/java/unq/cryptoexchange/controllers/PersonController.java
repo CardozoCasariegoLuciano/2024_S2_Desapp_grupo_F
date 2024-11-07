@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
+import unq.cryptoexchange.dto.response.UserOperations;
 import unq.cryptoexchange.services.impl.PersonService;
 
 @RestController
@@ -52,4 +53,12 @@ public class PersonController {
         Map<String, String> response = Map.of("message", "Person registered successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    @Operation(summary = "User operations between tho dates")
+    @PostMapping("/operations/{personID}")
+    public ResponseEntity<UserOperations> userOperations(@PathVariable Long personID, @RequestParam String initDate, @RequestParam String endDate) {
+        UserOperations operations = personService.getUserOperations(personID,initDate,endDate);
+        return new ResponseEntity<>(operations, HttpStatus.OK);
+    }
+
 }

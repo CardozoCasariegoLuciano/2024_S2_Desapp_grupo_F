@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ItemExAttemptDto {
-
+    private Long itemExAttemptID;
     private LocalDateTime createdAt;
     private CryptoSymbol crypto;
     private int cryptoQuantity;

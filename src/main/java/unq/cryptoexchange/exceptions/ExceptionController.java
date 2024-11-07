@@ -40,4 +40,18 @@ public class ExceptionController {
         resp.put("internal_error", ex.getMessage());
         return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(NotFoundExceptions.class)
+    public ResponseEntity<HashMap<String, String>> notFoundExceptions(NotFoundExceptions ex){
+        HashMap<String, String> resp = new HashMap<>();
+        resp.put("Error", ex.getMessage());
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ExchangeOutOfRange.class)
+    public ResponseEntity<HashMap<String, String>> exchangeOutOfRange(ExchangeOutOfRange ex){
+        HashMap<String, String> resp = new HashMap<>();
+        resp.put("Error", ex.getMessage());
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    }
 }

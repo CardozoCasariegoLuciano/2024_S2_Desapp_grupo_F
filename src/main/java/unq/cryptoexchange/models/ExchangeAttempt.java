@@ -35,6 +35,8 @@ public class ExchangeAttempt {
     private AttemptStatus status;
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
+    private Long requestingUserID = null;
+    private LocalDateTime lastUpdate = null;
 
 
     public ExchangeAttempt(Float price, int cryptoQuantity, CryptoSymbol crypto, Long personId, String nameUser, String lastNameUser, OperationType operationType) {
