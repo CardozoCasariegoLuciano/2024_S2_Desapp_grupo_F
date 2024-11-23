@@ -5,11 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import java.awt.Desktop;
 import java.net.URI;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class CryptoExchangeApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(CryptoExchangeApplication.class);
