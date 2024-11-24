@@ -36,6 +36,11 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
         return cryptoPrices;
     }
 
+    // Obtener precios de las últimas 24 horas
+    public List<CryptoCurrency> getLast24HoursPrices(String symbol) {
+        return binanceProxyService.getLast24HoursPrices(symbol);
+    }
+
     public boolean isPriceInRange(ExchangeAttempt attemp){
         CryptoCurrency currentCryptoPrice = this.getPrice(attemp.getCrypto().name());
         Float exchangeValue = attemp.getPrice();

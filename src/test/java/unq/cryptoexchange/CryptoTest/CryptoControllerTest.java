@@ -11,6 +11,9 @@ import unq.cryptoexchange.controllers.CyptoController;
 import unq.cryptoexchange.models.CryptoCurrency;
 import unq.cryptoexchange.services.impl.CryptoPriceService;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -38,6 +41,33 @@ class CryptoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"symbol\":\"BTCUSDT\",\"price\":65000.50,\"lastUpdateDateAndTime\":\"2024-01-01T12:00:00\"}"));
+    }
+
+    @Test
+    void test_02_getCryptoPriceHistory() throws Exception {
+        String symbol = "BTCUSDT";
+
+        // Datos simulados
+        List<CryptoCurrency> mockPriceHistory = Arrays.asList(
+                new CryptoCurrency(symbol, 95000.0f, "2024-10-13T12:00:00"),
+                new CryptoCurrency(symbol, 95200.0f, "2024-10-13T13:00:00")
+        );
+
+        // Simular comportamiento del servicio
+        when(cryptoPriceService.getLast24HoursPrices(symbol)).thenReturn(mockPriceHistory);
+
+        // Ejecutar el endpoint y verificar la respuesta
+        mockMvc.perform(get("/api/v1/crypto/price/history/{symbol}", symbol)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                        [
+                            {"symbol":"BTCUSDT","price":95000.0,"lastUpdateDateAndTime":"2024-10-13T12:00:00"},
+                            {"symbol":"BTCUSDT","price":95200.0,"lastUpdateDateAndTime":"2024-10-13T13:00:00"}
+                        ]
+                        """
+                ));
     }
 
 
