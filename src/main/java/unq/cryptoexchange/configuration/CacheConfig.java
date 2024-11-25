@@ -14,16 +14,13 @@ import java.util.concurrent.TimeUnit;
 public class CacheConfig {
 
     @Bean
-    public Caffeine<Object, Object> caffeineConfig() {
-        return Caffeine.newBuilder()
+    public CaffeineCacheManager cacheManager() {
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("cryptoCache");
+        cacheManager.setCaffeine(Caffeine.newBuilder()
                 .maximumSize(100)
-                .expireAfterWrite(10, TimeUnit.MINUTES);
-    }
-
-    @Bean
-    public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
-        cacheManager.setCaffeine(caffeine);
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .recordStats()
+        );
         return cacheManager;
     }
 }
