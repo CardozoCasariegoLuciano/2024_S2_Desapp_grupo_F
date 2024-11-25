@@ -18,10 +18,12 @@ public class BinanceProxyService {
         this.restTemplate = new RestTemplate();
     }
 
+
     public CryptoCurrency getCryptoPrice(String symbol) {
         String url = BASE_URL + symbol;
         return restTemplate.getForObject(url, CryptoCurrency.class);
     }
+
 
 
     public List<CryptoCurrency> getLast24HoursPrices(String symbol) {
