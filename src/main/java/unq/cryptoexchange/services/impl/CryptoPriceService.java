@@ -1,6 +1,7 @@
 package unq.cryptoexchange.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import unq.cryptoexchange.dto.request.ExchangeAttemptDto;
 import unq.cryptoexchange.models.CryptoCurrency;
@@ -17,6 +18,7 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
     @Autowired
     private BinanceProxyService binanceProxyService;
 
+    @Cacheable(value = "cryptoCache", key = "'getPrice:' + #symbol")
     public CryptoCurrency getPrice(String symbol) {
         CryptoCurrency cryptoCurrency = binanceProxyService.getCryptoPrice(symbol);
         cryptoCurrency.setLastUpdateDateAndTime(LocalDateTime.now().toString());
@@ -24,6 +26,7 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
         return cryptoCurrency;
     }
 
+    @Cacheable(value = "cryptoCache", key = "'getAllPrices:' + #symbols.hashCode()")
     public List<CryptoCurrency> getAllPrices(List<String> symbols) {
         List<CryptoCurrency> cryptoPrices = new ArrayList<>();
 
@@ -34,6 +37,11 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
         }
 
         return cryptoPrices;
+    }
+
+    @Cacheable(value = "cryptoCache", key = "'getLast24HoursPrices:' + #symbol")
+    public List<CryptoCurrency> getLast24HoursPrices(String symbol) {
+        return binanceProxyService.getLast24HoursPrices(symbol);
     }
 
     public boolean isPriceInRange(ExchangeAttempt attemp){

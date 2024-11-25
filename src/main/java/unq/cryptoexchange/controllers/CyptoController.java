@@ -27,18 +27,18 @@ public class CyptoController {
     private CryptoPriceService cryptoPriceService;
 
     @Operation(
-        summary = "Get cryptocurrency price by symbol", 
-        description = "Retrieve the current price of a specific cryptocurrency by providing its symbol. Returns details of the cryptocurrency's current price if found."
+            summary = "Get cryptocurrency price by symbol",
+            description = "Retrieve the current price of a specific cryptocurrency by providing its symbol. Returns details of the cryptocurrency's current price if found."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Cryptocurrency price retrieved successfully",
-                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CryptoCurrency.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid cryptocurrency symbol provided",
-                     content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Invalid cryptocurrency symbol\"}"))),
-        @ApiResponse(responseCode = "404", description = "Cryptocurrency symbol not found in the system",
-                     content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Cryptocurrency not found\"}"))),
-        @ApiResponse(responseCode = "500", description = "Internal server error while retrieving cryptocurrency price",
-                     content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Internal server error\"}")))
+            @ApiResponse(responseCode = "200", description = "Cryptocurrency price retrieved successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CryptoCurrency.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid cryptocurrency symbol provided",
+                    content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Invalid cryptocurrency symbol\"}"))),
+            @ApiResponse(responseCode = "404", description = "Cryptocurrency symbol not found in the system",
+                    content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Cryptocurrency not found\"}"))),
+            @ApiResponse(responseCode = "500", description = "Internal server error while retrieving cryptocurrency price",
+                    content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Internal server error\"}")))
     })
     @GetMapping("/price/{symbol}")
     public CryptoCurrency getCryptoPrice(@PathVariable String symbol) {
@@ -46,14 +46,14 @@ public class CyptoController {
     }
 
     @Operation(
-        summary = "Get prices for a predefined list of cryptocurrencies", 
-        description = "Retrieve the current prices of a predefined list of popular cryptocurrencies. This endpoint returns price information for each symbol listed in the system."
+            summary = "Get prices for a predefined list of cryptocurrencies",
+            description = "Retrieve the current prices of a predefined list of popular cryptocurrencies. This endpoint returns price information for each symbol listed in the system."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "List of cryptocurrency prices retrieved successfully",
-                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CryptoCurrency.class))),
-        @ApiResponse(responseCode = "500", description = "Internal server error while retrieving cryptocurrency prices",
-                     content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Internal server error\"}")))
+            @ApiResponse(responseCode = "200", description = "List of cryptocurrency prices retrieved successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CryptoCurrency.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error while retrieving cryptocurrency prices",
+                    content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Internal server error\"}")))
     })
     @GetMapping("/prices")
     public List<CryptoCurrency> getAllCryptoPrices() {
@@ -64,4 +64,20 @@ public class CyptoController {
 
         return cryptoPriceService.getAllPrices(symbols);
     }
+    @Operation(
+            summary = "Get 24hs prices for a cryptocurrency",
+            description = "Retrieve the last 24hs prices for a specific cryptocurrency. "
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Historical prices retrieved succefully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CryptoCurrency.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error while retrieving historical prices",
+                    content = @Content(mediaType = "application/json", schema = @Schema(example = "{\"error\": \"Internal server error\"}")))
+    })
+    @GetMapping("/price/history/{symbol}")
+    public List<CryptoCurrency> getCryptoPriceHistory(@PathVariable String symbol) {
+        return cryptoPriceService.getLast24HoursPrices(symbol);
+    }
+
+
 }
