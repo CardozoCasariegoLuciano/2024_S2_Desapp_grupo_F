@@ -26,7 +26,7 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
         return cryptoCurrency;
     }
 
-    @Cacheable(value = "allCryptoPrices", key = "#symbol")
+    @Cacheable(value = "allCryptoPrices", key = "#symbols")
     public List<CryptoCurrency> getAllPrices(List<String> symbols) {
         List<CryptoCurrency> cryptoPrices = new ArrayList<>();
 
