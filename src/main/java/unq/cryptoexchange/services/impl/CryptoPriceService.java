@@ -18,7 +18,7 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
     @Autowired
     private BinanceProxyService binanceProxyService;
 
-    @Cacheable(value = "cryptoPrice", key = "#symbol")
+    @Cacheable(value = "cryptoCache", key = "'getPrice:' + #symbol")
     public CryptoCurrency getPrice(String symbol) {
         CryptoCurrency cryptoCurrency = binanceProxyService.getCryptoPrice(symbol);
         cryptoCurrency.setLastUpdateDateAndTime(LocalDateTime.now().toString());
@@ -26,7 +26,7 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
         return cryptoCurrency;
     }
 
-    @Cacheable(value = "allCryptoPrices", key = "#symbols")
+    @Cacheable(value = "cryptoCache", key = "'getAllPrices:' + #symbols.hashCode()")
     public List<CryptoCurrency> getAllPrices(List<String> symbols) {
         List<CryptoCurrency> cryptoPrices = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class CryptoPriceService implements CryptoPriceServiceInterface {
         return cryptoPrices;
     }
 
-    @Cacheable(value = "cypto24hPrices", key = "#symbol")
+    @Cacheable(value = "cryptoCache", key = "'getLast24HoursPrices:' + #symbol")
     public List<CryptoCurrency> getLast24HoursPrices(String symbol) {
         return binanceProxyService.getLast24HoursPrices(symbol);
     }
