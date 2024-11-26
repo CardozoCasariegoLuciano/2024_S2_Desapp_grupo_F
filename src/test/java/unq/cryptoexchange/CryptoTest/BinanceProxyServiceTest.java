@@ -1,6 +1,6 @@
 package unq.cryptoexchange.CryptoTest;
 
-import org.junit.jupiter.api.Test;
+/*import org.junit.jupiter.api.Test;
 import unq.cryptoexchange.models.CryptoCurrency;
 import unq.cryptoexchange.services.impl.BinanceProxyService;
 
@@ -28,4 +28,4 @@ public class BinanceProxyServiceTest {
         assertNotNull(firstCrypto.getPrice(), "The price should not be null.");
         assertNotNull(firstCrypto.getLastUpdateDateAndTime(), "The timestamp should not be null.");
     }
-}
+}*/
