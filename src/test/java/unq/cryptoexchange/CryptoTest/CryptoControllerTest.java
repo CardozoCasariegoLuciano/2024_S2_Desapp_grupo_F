@@ -47,16 +47,13 @@ class CryptoControllerTest {
     void test_02_getCryptoPriceHistory() throws Exception {
         String symbol = "BTCUSDT";
 
-        // Datos simulados
         List<CryptoCurrency> mockPriceHistory = Arrays.asList(
                 new CryptoCurrency(symbol, 95000.0f, "2024-10-13T12:00:00"),
                 new CryptoCurrency(symbol, 95200.0f, "2024-10-13T13:00:00")
         );
 
-        // Simular comportamiento del servicio
         when(cryptoPriceService.getLast24HoursPrices(symbol)).thenReturn(mockPriceHistory);
 
-        // Ejecutar el endpoint y verificar la respuesta
         mockMvc.perform(get("/api/v1/crypto/price/history/{symbol}", symbol)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
