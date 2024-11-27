@@ -366,7 +366,7 @@ class PersonServiceTest {
         UserOperations resp = this.personService.getUserOperations(requested.getId(), "17/10/2020", "17/10/2030");
 
         Assertions.assertEquals(resp.getOperations().size(), 1);
-        Assertions.assertTrue(this.AreTheSameNumber(resp.getUsTotal(), savesExchange.getPrice().doubleValue()));
+        Assertions.assertTrue(PersonServiceTest.AreTheSameNumber(resp.getUsTotal(), savesExchange.getPrice().doubleValue()));
         Assertions.assertEquals(resp.getArgTotal(), savesExchange.getAmountArg().doubleValue());
     }
 

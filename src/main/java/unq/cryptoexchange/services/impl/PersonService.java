@@ -110,4 +110,12 @@ public class PersonService implements PersonServiceInterface {
 
         return new UserOperations(totals[0], totals[1], operations);
     }
+
+    @Override
+    public boolean authenticate(String email, String password)
+    {
+        Optional<Person> existPerson = this.personRepository.findByEmail(email);
+
+        return existPerson.isPresent() && existPerson.get().getPassword().equals(password);
+    }
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder.Default;
 import unq.cryptoexchange.models.enums.AttemptStatus;
 import unq.cryptoexchange.models.enums.CryptoSymbol;
 import unq.cryptoexchange.models.enums.OperationType;
@@ -35,7 +36,9 @@ public class ExchangeAttempt {
     private AttemptStatus status;
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
+    @Builder.Default
     private Long requestingUserID = null;
+    @Default
     private LocalDateTime lastUpdate = null;
 
 
