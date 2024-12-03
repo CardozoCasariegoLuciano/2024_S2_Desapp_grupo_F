@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import unq.cryptoexchange.dto.request.PersonLoginDto;
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
 import unq.cryptoexchange.dto.response.UserOperations;
 import unq.cryptoexchange.services.impl.PersonService;
@@ -52,6 +53,15 @@ public class PersonController {
         personService.savePerson(personBody);
         Map<String, String> response = Map.of("message", "Person registered successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<Map<String, String>> loginPerson(
+            @Parameter(description = "Details of the person to be logged", required = true) @Validated @RequestBody PersonLoginDto personBody) {
+
+        String token = personService.loginPerson(personBody);
+        Map<String, String> response = Map.of("token", token);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "User operations between tho dates")

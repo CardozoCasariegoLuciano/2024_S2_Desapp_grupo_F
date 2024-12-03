@@ -1,8 +1,14 @@
 package unq.cryptoexchange.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import unq.cryptoexchange.dto.request.PersonLoginDto;
 import unq.cryptoexchange.dto.request.PersonRegistrationDto;
 import unq.cryptoexchange.dto.response.UserOperations;
 import unq.cryptoexchange.dto.response.UserSingleOperationDto;
@@ -27,13 +33,28 @@ public class PersonService implements PersonServiceInterface {
     private final PersonRepository personRepository;
     private final ExchangeAttemptRepository exchangeAttemptRepository;
     private final CryptoPriceServiceInterface cryptoPriceServiceInterface;
-
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PersonService(PersonRepository personRepository, ExchangeAttemptRepository exchangeAttemptRepository, CryptoPriceServiceInterface cryptoPriceServiceInterface) {
+    public PersonService(
+            PersonRepository personRepository,
+            ExchangeAttemptRepository exchangeAttemptRepository,
+            CryptoPriceServiceInterface cryptoPriceServiceInterface,
+            AuthenticationManager authenticationManager,
+            JwtService jwtService,
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder
+    ) {
         this.personRepository = personRepository;
         this.exchangeAttemptRepository = exchangeAttemptRepository;
         this.cryptoPriceServiceInterface = cryptoPriceServiceInterface;
+         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -59,12 +80,29 @@ public class PersonService implements PersonServiceInterface {
                 .lastname(personDto.getLastname())
                 .email(personDto.getEmail())
                 .address(personDto.getAddress())
-                .password(personDto.getPassword())
+                .password(passwordEncoder.encode(personDto.getPassword()))
                 .cvu(personDto.getCvu())
                 .wallet(personDto.getWallet())
                 .build();
 
         return personRepository.save(person);
+    }
+
+    @Override
+    public String loginPerson(PersonLoginDto personBody) {
+        Optional<Person> opPerson = this.personRepository.findByEmail(personBody.getEmail());
+
+        if(opPerson.isEmpty()){
+            throw new NotFoundExceptions("Email o clave incorrectos");
+        }
+        Person person = opPerson.get();
+
+        boolean passMatch = this.passwordEncoder.matches(personBody.getPassword(), person.getPassword());
+        if(!passMatch){
+            throw new NotFoundExceptions("Email o clave incorrectos");
+        }
+
+        return jwtService.generateToken(person.getEmail());
     }
 
     @Override
@@ -110,4 +148,5 @@ public class PersonService implements PersonServiceInterface {
 
         return new UserOperations(totals[0], totals[1], operations);
     }
+
 }
