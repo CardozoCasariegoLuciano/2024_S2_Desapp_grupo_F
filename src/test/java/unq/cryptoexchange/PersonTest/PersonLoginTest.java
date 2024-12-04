@@ -1,5 +1,6 @@
 package unq.cryptoexchange.PersonTest;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,5 +63,10 @@ public class PersonLoginTest {
         String token = this.personService.loginPerson(body);
 
         Assertions.assertNotNull(token);
+    }
+
+    @AfterEach
+    void clearAll() {
+        this.personService.cleanAll();
     }
 }
