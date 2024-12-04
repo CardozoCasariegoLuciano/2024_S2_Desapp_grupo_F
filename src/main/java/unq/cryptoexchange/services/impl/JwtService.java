@@ -1,4 +1,6 @@
 package unq.cryptoexchange.services.impl;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
 import unq.cryptoexchange.exceptions.InvalidException;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +18,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY = "your_secret_key_super_mas_largaaaaa";
+    private static final String SECRETKEY = "yoursecretkeysupermaslargaaaaasd231asdasdwwqeqsda";
 
     public String extractUsername(String token) {
         try{
@@ -32,7 +35,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY.getBytes())
+                .setSigningKey(this.secretKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -48,8 +51,13 @@ public class JwtService {
                 .setSubject(userDetails)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes())
+                .signWith(this.secretKey())
                 .compact();
+    }
+
+    private SecretKey secretKey(){
+        byte[] keybytes = Decoders.BASE64.decode(SECRETKEY);
+        return Keys.hmacShaKeyFor(keybytes);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

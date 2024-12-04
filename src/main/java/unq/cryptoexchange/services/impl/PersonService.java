@@ -33,9 +33,7 @@ public class PersonService implements PersonServiceInterface {
     private final PersonRepository personRepository;
     private final ExchangeAttemptRepository exchangeAttemptRepository;
     private final CryptoPriceServiceInterface cryptoPriceServiceInterface;
-    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -43,17 +41,13 @@ public class PersonService implements PersonServiceInterface {
             PersonRepository personRepository,
             ExchangeAttemptRepository exchangeAttemptRepository,
             CryptoPriceServiceInterface cryptoPriceServiceInterface,
-            AuthenticationManager authenticationManager,
             JwtService jwtService,
-            UserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder
     ) {
         this.personRepository = personRepository;
         this.exchangeAttemptRepository = exchangeAttemptRepository;
         this.cryptoPriceServiceInterface = cryptoPriceServiceInterface;
-         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
     }
 
