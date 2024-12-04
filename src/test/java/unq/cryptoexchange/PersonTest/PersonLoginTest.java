@@ -14,7 +14,7 @@ import unq.cryptoexchange.services.PersonServiceInterface;
 
 @SpringBootTest
 
-public class PersonLoginTest {
+class PersonLoginTest {
     @Autowired
     PersonServiceInterface personService;
 
