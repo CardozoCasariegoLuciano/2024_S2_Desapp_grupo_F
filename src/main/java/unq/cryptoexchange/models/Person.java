@@ -47,7 +47,6 @@ public class Person {
 
     @JsonIgnore  
     @NotNull
-    @Pattern(regexp ="^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*?&_-]{8,}$")
     private String password;
     
     @Min(0)
