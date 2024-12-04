@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.SignatureAlgorithm;
 import unq.cryptoexchange.exceptions.InvalidException;
 
 import javax.crypto.SecretKey;
