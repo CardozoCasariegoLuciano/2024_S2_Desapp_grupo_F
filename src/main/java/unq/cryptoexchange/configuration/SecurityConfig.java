@@ -32,7 +32,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**", // OpenAPI JSON
                                 "/swagger-ui/**",  // Swagger UI resources
                                 "/swagger-ui.html", // Swagger UI HTML
-                                "/h2-console/**"
+                                "/h2-console/**",
+                                "/actuator/**"
                         ).permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
