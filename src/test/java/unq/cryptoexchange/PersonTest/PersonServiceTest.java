@@ -106,25 +106,6 @@ class PersonServiceTest {
     }
 
     @Test
-    void test_04_InvalidPassword() {
-        PersonRegistrationDto personDto = PersonRegistrationDto.builder()
-                .name("Test")
-                .lastname("LastTest")
-                .email("test.test@example.com")
-                .address("Test 123")
-                .password("passinvalid")
-                .cvu("2231456789954442334123")
-                .wallet("123456789")
-                .build();
-
-        Exception exception = Assertions.assertThrows(ConstraintViolationException.class, () -> {
-            this.personService.savePerson(personDto);
-        });
-
-        Assertions.assertTrue(exception.getMessage().contains("propertyPath=password"));
-    }
-
-    @Test
     void test_05_EmptyName() {
         PersonRegistrationDto personDto = PersonRegistrationDto.builder()
                 .name(" ")
